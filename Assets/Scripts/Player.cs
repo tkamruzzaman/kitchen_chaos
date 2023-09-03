@@ -21,15 +21,46 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        
+
         Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+        
+        float moveDistance = moveSpeed* Time.deltaTime;
+        float playerRadius = 0.7f;
+        float playerHeight = 2f;
+
+        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirection, moveDistance);
 
         IsWalking = moveDirection != Vector3.zero;
 
-        transform.position += moveSpeed * Time.deltaTime * moveDirection ;
+        //testing can we move on one direction in diagonal movement
+        if (!canMove)
+        {
+            Vector3 moveDirX = new Vector3(moveDirection.x, 0, 0).normalized;
+            canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+            if (canMove)
+            {
+                moveDirection = moveDirX;
+            }
+            else
+            {
+                Vector3 moveDirZ = new Vector3(0, 0, moveDirection.z).normalized;
+                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+                if (canMove)
+                {
+                    moveDirection = moveDirZ;
+                }
+                else
+                {
+                    //Can not move
+                }
+            }
+        }
 
-        transform.forward = Vector3.Slerp(transform.forward,  moveDirection, Time.deltaTime * rotationSpeed);
+        if (canMove)
+        {
+            transform.position += moveDistance * moveDirection;
+        }
+        transform.forward = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
 
     }
-
 }

@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kitchenObjectSO: {fileID: 11400000, guid: 684894c9173a50b488d3e20084f97800, type: 2}
-  spawnPoint: {fileID: 8667136267922776855}
+  kitchenObjectHoldPoint: {fileID: 8667136267922776855}
 --- !u!1001 &2231384036608386454
 PrefabInstance:
   m_ObjectHideFlags: 0

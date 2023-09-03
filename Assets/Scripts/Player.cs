@@ -8,10 +8,13 @@ public class Player : MonoBehaviour
     private GameInput gameInput;
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private LayerMask countersLayerMask;
 
     private bool isWalking;
     [SerializeField]
     public bool IsWalking { get => isWalking; private set { isWalking = value; } }
+
+    private Vector3 lastInteractDirection;
 
     private void Awake()
     {
@@ -20,11 +23,17 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        HandleMovement();
+        HandleInterection();
+    }
+
+    private void HandleMovement()
+    {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
-        
-        float moveDistance = moveSpeed* Time.deltaTime;
+
+        float moveDistance = moveSpeed * Time.deltaTime;
         float playerRadius = 0.7f;
         float playerHeight = 2f;
 
@@ -61,6 +70,26 @@ public class Player : MonoBehaviour
             transform.position += moveDistance * moveDirection;
         }
         transform.forward = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
+
+    }
+
+    private void HandleInterection()
+    {
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+
+        Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+        if(moveDirection != Vector3.zero)
+        {
+            lastInteractDirection = moveDirection;
+        }
+        float interectDistance = 2f;
+
+       if( Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit raycastHit, interectDistance, countersLayerMask))
+        {
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
+                clearCounter.Interact();
+            }
+        }
 
     }
 }

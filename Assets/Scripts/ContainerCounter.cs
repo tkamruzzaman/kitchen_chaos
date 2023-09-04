@@ -23,4 +23,9 @@ public class ContainerCounter : BaseCounter
             //player is carrying kitchenobject
         }
     }
+
+    public override void InteractAlternate(Player player)
+    {
+
+    }
 }

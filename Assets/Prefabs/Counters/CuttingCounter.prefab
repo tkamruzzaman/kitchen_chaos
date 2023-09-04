@@ -200,7 +200,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kitchenObjectHoldPoint: {fileID: 5296742975199524621}
-  cutKitchenObjectSO: {fileID: 11400000, guid: 3fe1ac7e55e75084297de360818257b8, type: 2}
+  cuttingRecipeSOList:
+  - {fileID: 11400000, guid: f491bfefcb5c8e54e8d175589a50179d, type: 2}
+  - {fileID: 11400000, guid: 7aeeb1b6ff1bf2b4a9c5393913600083, type: 2}
+  - {fileID: 11400000, guid: 6b2e8cbabfea53747a28bc4bba5421b7, type: 2}
 --- !u!1001 &5943710789794269219
 PrefabInstance:
   m_ObjectHideFlags: 0

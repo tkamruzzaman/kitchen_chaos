@@ -2,15 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter, IHasProgress
 {
     public event EventHandler OnInteracted;
 
-    public event EventHandler<OnProgessChangedEventArgs> OnProgessChanged;
-    public class OnProgessChangedEventArgs: EventArgs
-    {
-        public float progessNormalized;
-    }
+    public event EventHandler<IHasProgress.OnProgessChangedEventArgs> OnProgessChanged;
 
     [SerializeField] private List<CuttingRecipeSO> cuttingRecipeSOList;
 
@@ -32,7 +28,7 @@ public class CuttingCounter : BaseCounter
 
                     int cuttingProgessMax = GetCuttingProgessMax(GetKitchenObject().GetKitchenObjectSO());
 
-                    OnProgessChanged?.Invoke(this, new OnProgessChangedEventArgs
+                    OnProgessChanged?.Invoke(this, new IHasProgress.OnProgessChangedEventArgs
                     {
                         progessNormalized = (float)cuttingProgress / cuttingProgessMax
                     });
@@ -55,7 +51,7 @@ public class CuttingCounter : BaseCounter
                 //player not carrying anything
                 GetKitchenObject().SetKitchenObjectParent(player);
                 //To solve the bug: when player picks up the object mid-cutting and progress bar remains
-                OnProgessChanged?.Invoke(this, new OnProgessChangedEventArgs { 
+                OnProgessChanged?.Invoke(this, new IHasProgress.OnProgessChangedEventArgs { 
                     progessNormalized = 0
                 });
             }
@@ -73,7 +69,7 @@ public class CuttingCounter : BaseCounter
 
             int cuttingProgessMax = GetCuttingProgessMax(GetKitchenObject().GetKitchenObjectSO());
             
-            OnProgessChanged?.Invoke(this, new OnProgessChangedEventArgs
+            OnProgessChanged?.Invoke(this, new IHasProgress.OnProgessChangedEventArgs
             {
                 progessNormalized = (float)cuttingProgress / cuttingProgessMax
             });

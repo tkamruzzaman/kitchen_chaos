@@ -1,28 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class NewBehaviourScript : MonoBehaviour
 {
     [SerializeField] private Image progessBarImage;
-    private CuttingCounter cuttingCounter;
+    private IHasProgress hasProgress;
 
     private void Awake()
     {
-        cuttingCounter = GetComponentInParent<CuttingCounter>();
+        hasProgress = GetComponentInParent<IHasProgress>();
+        if (hasProgress == null)
+        {
+            Debug.LogError("Doesn't contain IHasProgress interface");
+        }
     }
 
     private void Start()
     {
-        cuttingCounter.OnProgessChanged += CuttingCounter_OnProgessChanged;
+        hasProgress.OnProgessChanged += HasProgress_OnProgessChanged;
         
         progessBarImage.fillAmount = 0;
 
         Hide();
     }
 
-    private void CuttingCounter_OnProgessChanged(object sender, CuttingCounter.OnProgessChangedEventArgs e)
+    private void HasProgress_OnProgessChanged(object sender, IHasProgress.OnProgessChangedEventArgs e)
     {
         progessBarImage.fillAmount = e.progessNormalized;
         if (e.progessNormalized == 0 || e.progessNormalized == 1)

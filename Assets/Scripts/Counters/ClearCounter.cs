@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ClearCounter : BaseCounter, IKitchenObjectParent
@@ -27,6 +25,26 @@ public class ClearCounter : BaseCounter, IKitchenObjectParent
             if (player.HasKitchenObject())
             {
                 //player is carrying kitchen object
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    // player is holding a Plate
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
+                else
+                {
+                    //Player is not carrying Plate but somthing else
+                    if (GetKitchenObject().TryGetPlate(out plateKitchenObject))
+                    {
+                        // Counter is holding a Plate
+                        if (plateKitchenObject.TryAddIngredient(player.GetKitchenObject().GetKitchenObjectSO()))
+                        {
+                            player.GetKitchenObject().DestroySelf();
+                        }
+                    }
+                }
             }
             else
             {

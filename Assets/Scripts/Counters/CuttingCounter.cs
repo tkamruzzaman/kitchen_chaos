@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IHasProgress
 {
+    public static event EventHandler OnAnyInteraction;
+
     public event EventHandler OnInteracted;
 
     public event EventHandler<IHasProgress.OnProgessChangedEventArgs> OnProgessChanged;
@@ -74,6 +76,7 @@ public class CuttingCounter : BaseCounter, IHasProgress
             cuttingProgress++;
             
             OnInteracted?.Invoke(this, EventArgs.Empty);
+            OnAnyInteraction?.Invoke(this, EventArgs.Empty);
 
             int cuttingProgessMax = GetCuttingProgessMax(GetKitchenObject().GetKitchenObjectSO());
             

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,10 +20,11 @@ public class GamePauseUI : MonoBehaviour
 
         optionsButton.onClick.AddListener(() =>
         {
-            optionsUI.Show();
+            Hide();
+            optionsUI.Show(Show);
         });
-        
-        mainMenuButton.onClick.AddListener(() => 
+
+        mainMenuButton.onClick.AddListener(() =>
         {
             Loader.Load(Loader.Scene.MainMenuScene);
         });
@@ -40,7 +42,14 @@ public class GamePauseUI : MonoBehaviour
 
     private void GameManager_OnGameUnpaused(object sender, System.EventArgs e) => Hide();
 
-    private void Show() => gameObject.SetActive(true);
+    private void Show()
+    {
+        gameObject.SetActive(true);
+        resumeButton.Select();
+    }
 
-    private void Hide() => gameObject.SetActive(false);
+    private void Hide()
+    {
+        gameObject.SetActive(false);
+    }
 }

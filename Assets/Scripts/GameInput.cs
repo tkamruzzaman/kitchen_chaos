@@ -7,6 +7,7 @@ public class GameInput : MonoBehaviour
 {
     public event EventHandler OnInteractAction;
     public event EventHandler OnInteractAlternateAction;
+    public event EventHandler OnPauseAction;
 
     private PlayerInputActions playerInputActions;
     private Vector2 inputVector = new Vector2(0, 0);
@@ -17,18 +18,24 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Enable();
 
         playerInputActions.Player.Interact.performed += Interact_Performed;
-        playerInputActions.Player.InteractAlternate.performed += InteractAlternate_Performed; ;    
+        playerInputActions.Player.InteractAlternate.performed += InteractAlternate_Performed;
+        playerInputActions.Player.Pause.performed += Pause_Performed;
     }
 
-    private void InteractAlternate_Performed(InputAction.CallbackContext obj)
+    private void OnDestroy()
     {
-        OnInteractAlternateAction?.Invoke(this, EventArgs.Empty);
+        playerInputActions.Player.Interact.performed -= Interact_Performed;
+        playerInputActions.Player.InteractAlternate.performed -= InteractAlternate_Performed;
+        playerInputActions.Player.Pause.performed -= Pause_Performed;
+    
+        playerInputActions.Dispose();
     }
 
-    private void Interact_Performed(InputAction.CallbackContext obj)
-    {
-        OnInteractAction?.Invoke(this, EventArgs.Empty);
-    }
+    private void Interact_Performed(InputAction.CallbackContext obj) => OnInteractAction?.Invoke(this, EventArgs.Empty);
+   
+    private void InteractAlternate_Performed(InputAction.CallbackContext obj) => OnInteractAlternateAction?.Invoke(this, EventArgs.Empty);
+   
+    private void Pause_Performed(InputAction.CallbackContext obj) => OnPauseAction?.Invoke(this, EventArgs.Empty);
 
     public Vector2 GetMovementVectorNormalized()
     {

@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewBehaviourScript : MonoBehaviour
+public class ProgessBarUI : MonoBehaviour
 {
     [SerializeField] private Image progessBarImage;
+
     private IHasProgress hasProgress;
 
     private void Awake()
@@ -27,6 +28,7 @@ public class NewBehaviourScript : MonoBehaviour
     private void HasProgress_OnProgessChanged(object sender, IHasProgress.OnProgessChangedEventArgs e)
     {
         progessBarImage.fillAmount = e.progessNormalized;
+
         if (e.progessNormalized == 0 || e.progessNormalized == 1)
         {
             Hide();
@@ -37,13 +39,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
-    private void Show()
-    {
-        gameObject.SetActive(true);
-    }
+    private void Show() => gameObject.SetActive(true);
 
-    private void Hide()
-    {
-        gameObject.SetActive(false);
-    }
+    private void Hide() => gameObject.SetActive(false);
 }

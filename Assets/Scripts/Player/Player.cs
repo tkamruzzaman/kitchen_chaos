@@ -16,6 +16,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     }
 
     private GameInput gameInput;
+
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private LayerMask countersLayerMask;
@@ -41,29 +42,33 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         {
             Debug.LogError("There is more than one Player instance");
         }
-
-        gameInput = FindObjectOfType<GameInput>();
     }
 
     private void Start()
     {
+        gameInput = FindObjectOfType<GameInput>();
+
         gameInput.OnInteractAction += GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
     }
 
-    private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
+    private void GameInput_OnInteractAction(object sender, EventArgs e)
     {
+        if (!GameManager.Instance.IsGamePlaying()) { return; }
+        
         if (selectedCounter != null)
         {
-            selectedCounter.InteractAlternate(this);
+            selectedCounter.Interact(this);
         }
     }
 
-    private void GameInput_OnInteractAction(object sender, EventArgs e)
+    private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
     {
-        if(selectedCounter != null)
+        if (!GameManager.Instance.IsGamePlaying()) { return; }
+
+        if (selectedCounter != null)
         {
-            selectedCounter.Interact(this);
+            selectedCounter.InteractAlternate(this);
         }
     }
 

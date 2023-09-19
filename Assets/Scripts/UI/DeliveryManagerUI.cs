@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DeliveryManagerUI : MonoBehaviour
 {
@@ -21,15 +18,9 @@ public class DeliveryManagerUI : MonoBehaviour
         UpdateVisual();
     }
 
-    private void DeliveryManager_OnRecipeSpawned(object sender, System.EventArgs e)
-    {
-        UpdateVisual();
-    }
+    private void DeliveryManager_OnRecipeSpawned(object sender, System.EventArgs e) => UpdateVisual();
 
-    private void DeliveryManager_OnRecipeCompleted(object sender, System.EventArgs e)
-    {
-        UpdateVisual();
-    }
+    private void DeliveryManager_OnRecipeCompleted(object sender, System.EventArgs e) => UpdateVisual();
 
     private void UpdateVisual()
     {
@@ -45,6 +36,5 @@ public class DeliveryManagerUI : MonoBehaviour
             recipeTransform.gameObject.SetActive(true);
             recipeTransform.GetComponent<DeliveryManagerSingleUI>().SetRecipeSO(recipeSO);
         }
-
     }
 }

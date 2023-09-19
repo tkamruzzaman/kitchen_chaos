@@ -6,6 +6,11 @@ public class CuttingCounter : BaseCounter, IHasProgress
 {
     public static event EventHandler OnAnyInteraction;
 
+    new public static void ResetStaticData()
+    {
+        OnAnyInteraction = null;
+    }
+
     public event EventHandler OnInteracted;
 
     public event EventHandler<IHasProgress.OnProgessChangedEventArgs> OnProgessChanged;

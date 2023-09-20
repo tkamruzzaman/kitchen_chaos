@@ -1,9 +1,19 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text recipeDeliveredText;
+    [SerializeField] private Button mainMenuButton;
+
+    private void Awake()
+    {
+        mainMenuButton.onClick.AddListener(() =>
+        {
+            Loader.Load(Loader.Scene.MainMenuScene);
+        });
+    }
 
     private void Start()
     {
@@ -26,8 +36,14 @@ public class GameOverUI : MonoBehaviour
         }
     }
 
-    private void Show() => gameObject.SetActive(true);
+    private void Show()
+    {
+        gameObject.SetActive(true);
+        mainMenuButton.Select();
+    }
 
-    private void Hide() => gameObject.SetActive(false);
-
+    private void Hide()
+    {
+        gameObject.SetActive(false);
+    }
 }

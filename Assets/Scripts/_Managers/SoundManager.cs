@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class SoundManager : MonoBehaviour
 {
@@ -19,45 +20,57 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+        Player.Instance.OnPickedSomthing += Player_OnPickedSomthing;
         DeliveryManager.Instance.OnRecipeSuccess += DeliveryManager_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed += DeliveryManager_OnRecipeFailed;
-        CuttingCounter.OnAnyInteraction += CuttingCounter_OnAnyInteraction;
-        Player.Instance.OnPickedSomthing += Player_OnPickedSomthing;
         BaseCounter.OnAnyObjectPlaced += BaseCounter_OnAnyObjectPlaced;
+        CuttingCounter.OnAnyInteraction += CuttingCounter_OnAnyInteraction;
         TrashCounter.OnAnyObjectTrashed += TrashCounter_OnAnyObjectTrashed;
     }
 
-    private void TrashCounter_OnAnyObjectTrashed(object sender, System.EventArgs e)
+    private void OnDestroy()
+    {
+        Player.Instance.OnPickedSomthing -= Player_OnPickedSomthing;
+        DeliveryManager.Instance.OnRecipeSuccess -= DeliveryManager_OnRecipeSuccess;
+        DeliveryManager.Instance.OnRecipeFailed -= DeliveryManager_OnRecipeFailed;
+        BaseCounter.OnAnyObjectPlaced -= BaseCounter_OnAnyObjectPlaced;
+        CuttingCounter.OnAnyInteraction -= CuttingCounter_OnAnyInteraction;
+        TrashCounter.OnAnyObjectTrashed -= TrashCounter_OnAnyObjectTrashed;
+    }
+
+    private void TrashCounter_OnAnyObjectTrashed(object sender, EventArgs e)
     {
         TrashCounter trashCounter = (TrashCounter)sender;
         PlaySound(audioClipReferencesSO.trash, trashCounter.transform.position);
     }
 
-    private void BaseCounter_OnAnyObjectPlaced(object sender, System.EventArgs e)
+    private void BaseCounter_OnAnyObjectPlaced(object sender, EventArgs e)
     {
         BaseCounter baseCounter = (BaseCounter)sender;
         PlaySound(audioClipReferencesSO.objectDrop, baseCounter.transform.position);
     }
 
-    private void Player_OnPickedSomthing(object sender, System.EventArgs e)
+    private void Player_OnPickedSomthing(object sender, EventArgs e)
     {
         PlaySound(audioClipReferencesSO.objectPickup, Player.Instance.transform.position);
     }
 
-    private void CuttingCounter_OnAnyInteraction(object sender, System.EventArgs e)
+    private void CuttingCounter_OnAnyInteraction(object sender, EventArgs e)
     {
         CuttingCounter cuttingCounter = (CuttingCounter)sender;
         PlaySound(audioClipReferencesSO.chop, cuttingCounter.transform.position);
     }
 
-    private void DeliveryManager_OnRecipeSuccess(object sender, System.EventArgs e)
+    private void DeliveryManager_OnRecipeSuccess(object sender, DeliveryManager.OnRecipeSuccessEventArgs e)
     {
-        PlaySound(audioClipReferencesSO.deliverySuccess, DeliveryCounter.Instance.transform.position);
+        DeliveryCounter deliveryCounter = e.deliveryCounter;
+        PlaySound(audioClipReferencesSO.deliverySuccess, deliveryCounter.transform.position);
     }
 
-    private void DeliveryManager_OnRecipeFailed(object sender, System.EventArgs e)
+    private void DeliveryManager_OnRecipeFailed(object sender, DeliveryManager.OnRecipeFailedEventArgs e)
     {
-        PlaySound(audioClipReferencesSO.deliveryFail, DeliveryCounter.Instance.transform.position);
+        DeliveryCounter deliveryCounter = e.deliveryCounter;
+        PlaySound(audioClipReferencesSO.deliveryFail, deliveryCounter.transform.position);
     }
 
     private void PlaySound(AudioClip audioClip, Vector3 position, float volumeMultiplier = 1f)
@@ -67,7 +80,7 @@ public class SoundManager : MonoBehaviour
 
     private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
     {
-        PlaySound(audioClipArray[Random.Range(0, audioClipArray.Length)], position, volume);
+        PlaySound(audioClipArray[UnityEngine.Random.Range(0, audioClipArray.Length)], position, volume);
     }
 
     public void PlayFootStepSound(Vector3 position, float volume)

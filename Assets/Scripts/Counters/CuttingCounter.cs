@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IHasProgress
 {
-    public static event EventHandler OnAnyInteraction;
-
     new public static void ResetStaticData()
     {
         OnAnyInteraction = null;
     }
 
     public event EventHandler OnInteracted;
+    public static event EventHandler OnAnyInteraction;
 
     public event EventHandler<IHasProgress.OnProgessChangedEventArgs> OnProgessChanged;
 
@@ -102,8 +101,7 @@ public class CuttingCounter : BaseCounter, IHasProgress
     private bool HasRecipeWithInput(KitchenObjectSO kitchenObjectSO)
     {
         CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(kitchenObjectSO);
-        return cuttingRecipeSO != null;
-    
+        return cuttingRecipeSO != null;  
     }
 
     private KitchenObjectSO GetOutputForInput(KitchenObjectSO kitchenObjectSO)

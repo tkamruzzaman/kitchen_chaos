@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,8 +12,15 @@ public class PlatesCounterVisual : MonoBehaviour
     private void Start()
     {
         platesCounter = GetComponentInParent<PlatesCounter>();
+
         platesCounter.OnPlateSpawned += PlatesCounter_OnPlateSpawned;
         platesCounter.OnPlateRemoved += PlatesCounter_OnPlateRemoved;
+    }
+
+    private void OnDestroy()
+    {
+        platesCounter.OnPlateSpawned -= PlatesCounter_OnPlateSpawned;
+        platesCounter.OnPlateRemoved -= PlatesCounter_OnPlateRemoved;
     }
 
     private void PlatesCounter_OnPlateSpawned(object sender, System.EventArgs e)

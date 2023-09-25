@@ -31,6 +31,12 @@ public class DeliveryResultUI : MonoBehaviour
         Hide();
     }
 
+    private void OnDestroy()
+    {
+        DeliveryManager.Instance.OnRecipeSuccess -= DeliveryManager_OnRecipeSuccess;
+        DeliveryManager.Instance.OnRecipeFailed -= DeliveryManager_OnRecipeFailed;
+    }
+
     private void DeliveryManager_OnRecipeSuccess(object sender, System.EventArgs e)
     {
         Show();

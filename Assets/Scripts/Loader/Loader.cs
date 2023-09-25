@@ -4,9 +4,9 @@ public static class Loader
 {
     public enum Scene
     {
-        MainMenuScene = 0,
-        GameScene = 1,
-        LoadingScene = 2,
+        MainMenuScene,
+        GameScene,
+        LoadingScene,
     }
 
     private static Scene targetScene;
@@ -14,12 +14,12 @@ public static class Loader
     public static void Load(Scene targetScene)
     {
         Loader.targetScene = targetScene;
-        SceneManager.LoadScene((int)Scene.LoadingScene);
+        SceneManager.LoadScene(Scene.LoadingScene.ToString());
     }
 
     public static void LoaderCallback()
     {
-        SceneManager.LoadScene((int)targetScene);
+        SceneManager.LoadScene(targetScene.ToString());
     }
 
 }

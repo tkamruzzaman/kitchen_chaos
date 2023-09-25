@@ -6,8 +6,16 @@ public class DeliveryManager : MonoBehaviour
 {
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
-    public event EventHandler OnRecipeSuccess;
-    public event EventHandler OnRecipeFailed;
+    public event EventHandler<OnRecipeSuccessEventArgs> OnRecipeSuccess;
+    public class OnRecipeSuccessEventArgs: EventArgs
+    {
+       public DeliveryCounter deliveryCounter;
+    }
+    public event EventHandler<OnRecipeFailedEventArgs> OnRecipeFailed;
+    public class OnRecipeFailedEventArgs: EventArgs
+    {
+        public DeliveryCounter deliveryCounter;
+    }
 
     public static DeliveryManager Instance { get; private set; }
 
@@ -19,6 +27,7 @@ public class DeliveryManager : MonoBehaviour
     private int waitingRecipesMax = 4;
 
     private int successfulRecipesAmount;
+    private int failedRecipesAmount;
 
     private void Awake()
     {
@@ -36,7 +45,7 @@ public class DeliveryManager : MonoBehaviour
             if (GameManager.Instance.IsGamePlaying() && waitingRecipeSOList.Count < waitingRecipesMax)
             {
                 RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
-                //print(waitingRecipeSO.recipeName);
+
                 waitingRecipeSOList.Add(waitingRecipeSO);
 
                 OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
@@ -44,7 +53,7 @@ public class DeliveryManager : MonoBehaviour
         }
     }
 
-    public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
+    public void DeliverRecipe(DeliveryCounter deliveryCounter, PlateKitchenObject plateKitchenObject)
     {
         for (int i = 0; i < waitingRecipeSOList.Count; i++)
         {
@@ -83,7 +92,10 @@ public class DeliveryManager : MonoBehaviour
                     waitingRecipeSOList.RemoveAt(i);
 
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
-                    OnRecipeSuccess?.Invoke(this, EventArgs.Empty); 
+                    OnRecipeSuccess?.Invoke(this, new OnRecipeSuccessEventArgs
+                    {
+                        deliveryCounter = deliveryCounter
+                    });
                     return;
                 }
             }
@@ -91,16 +103,17 @@ public class DeliveryManager : MonoBehaviour
         //No matches found!
         //Player did not deliver a correct recipe
         //print("Player did not deliver a correct recipe");
-        OnRecipeFailed?.Invoke(this, EventArgs.Empty);
+        failedRecipesAmount++;
+
+        OnRecipeFailed?.Invoke(this, new OnRecipeFailedEventArgs
+        {
+            deliveryCounter = deliveryCounter
+        });
     }
 
-    public List<RecipeSO> GetWaitingRecipeSOList()
-    {
-        return waitingRecipeSOList;
-    }
+    public List<RecipeSO> GetWaitingRecipeSOList() => waitingRecipeSOList;
 
-    public int GetSuccessfulRecipesAmount()
-    {
-        return successfulRecipesAmount;
-    }
+    public int GetSuccessfulRecipesAmount() => successfulRecipesAmount;
+
+    public int GetFailedRecipesAmont() => failedRecipesAmount;
 }

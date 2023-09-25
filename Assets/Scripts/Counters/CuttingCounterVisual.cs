@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CuttingCounterVisual : MonoBehaviour
@@ -18,6 +16,11 @@ public class CuttingCounterVisual : MonoBehaviour
     private void Start()
     {
         cuttingCounter.OnInteracted += CuttingCounter_OnInteracted;
+    }
+
+    private void OnDestroy()
+    {
+        cuttingCounter.OnInteracted -= CuttingCounter_OnInteracted;
     }
 
     private void CuttingCounter_OnInteracted(object sender, System.EventArgs e)

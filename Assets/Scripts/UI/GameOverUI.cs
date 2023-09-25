@@ -4,11 +4,18 @@ using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text recipeDeliveredText;
+    [SerializeField] private TMP_Text recipeDeliveredCountText;
+    [SerializeField] private TMP_Text recipeFailedCountText;
+    [SerializeField] private Button replayButton;
     [SerializeField] private Button mainMenuButton;
 
     private void Awake()
     {
+        replayButton.onClick.AddListener(() =>
+        {
+            Loader.Load(Loader.Scene.GameScene);
+        });
+
         mainMenuButton.onClick.AddListener(() =>
         {
             Loader.Load(Loader.Scene.MainMenuScene);
@@ -28,7 +35,8 @@ public class GameOverUI : MonoBehaviour
         {
             Show();
 
-            recipeDeliveredText.text = DeliveryManager.Instance.GetSuccessfulRecipesAmount().ToString();
+            recipeDeliveredCountText.text = DeliveryManager.Instance.GetSuccessfulRecipesAmount().ToString();
+            recipeFailedCountText.text = DeliveryManager.Instance.GetFailedRecipesAmont().ToString();
         }
         else
         {
@@ -39,7 +47,7 @@ public class GameOverUI : MonoBehaviour
     private void Show()
     {
         gameObject.SetActive(true);
-        mainMenuButton.Select();
+        replayButton.Select();
     }
 
     private void Hide()

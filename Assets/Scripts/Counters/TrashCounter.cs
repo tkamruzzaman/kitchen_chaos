@@ -21,6 +21,5 @@ public class TrashCounter : BaseCounter
 
     public override void InteractAlternate(Player player)
     {
-
     }
 }

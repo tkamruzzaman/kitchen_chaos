@@ -27,7 +27,6 @@ public class PlatesCounter : BaseCounter
 
                 OnPlateSpawned?.Invoke(this, EventArgs.Empty);
             }
-
         }
     }
 
@@ -48,6 +47,5 @@ public class PlatesCounter : BaseCounter
 
     public override void InteractAlternate(Player player)
     {
-
     }
 }

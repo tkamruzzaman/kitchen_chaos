@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ContainerCounter : BaseCounter
@@ -26,6 +24,5 @@ public class ContainerCounter : BaseCounter
 
     public override void InteractAlternate(Player player)
     {
-
     }
 }

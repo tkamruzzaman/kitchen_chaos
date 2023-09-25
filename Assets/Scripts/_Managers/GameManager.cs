@@ -19,10 +19,10 @@ public class GameManager : MonoBehaviour
 
     private State state;
 
-    //private float waitingToStartTimer = 1f;
     private float countdownToStartTimer = 3f;
     private float gamePlayingTimer;
-    private float gamePlayingTimerMax = 100f;
+    [Range(10, 300)]
+    [SerializeField] private float gamePlayingTimerMax = 90f;
 
     private GameInput gameInput;
 
@@ -87,28 +87,15 @@ public class GameManager : MonoBehaviour
             case State.GameOver:
                 break;
         }
-        //print(state);
     }
 
-    public bool IsGamePlaying()
-    {
-        return state == State.GamePlaying;
-    }
+    public bool IsCountdownToStartActive() => state == State.CountdownToStart;
+    
+    public bool IsGamePlaying() => state == State.GamePlaying;
 
-    public bool IsCountdownToStartActive()
-    {
-        return state == State.CountdownToStart;
-    }
-
-    public float GetCountdownToStartTimer()
-    {
-        return countdownToStartTimer;
-    }
-
-    public bool IsGameOver()
-    {
-        return state == State.GameOver;
-    }
+    public bool IsGameOver() => state == State.GameOver;
+    
+    public float GetCountdownToStartTimer() => countdownToStartTimer;
 
     public float GetGamePlayingTimerNormalized()
     {
@@ -129,5 +116,11 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
             OnGameUnpaused?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    private void OnDestroy()
+    {
+        gameInput.OnPauseAction -= GameInput_OnPauseAction;
+        gameInput.OnInteractAction -= GameInput_OnInteractAction;
     }
 }

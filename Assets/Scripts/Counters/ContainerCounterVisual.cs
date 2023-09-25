@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ContainerCounterVisual : MonoBehaviour
@@ -17,6 +15,11 @@ public class ContainerCounterVisual : MonoBehaviour
     private void Start()
     {
         containerCounter.OnInteracted += ContainerCounter_OnInteracted;
+    }
+
+    private void OnDestroy()
+    {
+        containerCounter.OnInteracted -= ContainerCounter_OnInteracted;
     }
 
     private void ContainerCounter_OnInteracted(object sender, System.EventArgs e)

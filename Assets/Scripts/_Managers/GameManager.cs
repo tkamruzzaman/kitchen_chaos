@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public bool IsWaitingToStart() => state == State.WaitingToStart;
+
     public bool IsCountdownToStartActive() => state == State.CountdownToStart;
     
     public bool IsGamePlaying() => state == State.GamePlaying;

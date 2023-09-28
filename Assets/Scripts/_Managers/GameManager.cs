@@ -104,6 +104,11 @@ public class GameManager : MonoBehaviour
         return 1 - (gamePlayingTimer / gamePlayingTimerMax);
     }
 
+    public float GetGamePlayingTime()
+    {
+        return gamePlayingTimer;
+    }
+
     public void TogglePauseGame()
     {
         isGamePaused = !isGamePaused;

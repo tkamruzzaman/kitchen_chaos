@@ -26,8 +26,9 @@ public class DeliveryManager : MonoBehaviour
     private float spawnRecipeTimerMax = 4f;
     private int waitingRecipesMax = 4;
 
-    private int successfulRecipesAmount;
-    private int failedRecipesAmount;
+    private int successfulRecipesAmount = 0;
+    private int failedRecipesAmount = 0;
+    private int totalEarnedMoney = 0;
 
     private void Awake()
     {
@@ -88,6 +89,7 @@ public class DeliveryManager : MonoBehaviour
                 {
                     //Player deliver the correct recipe!
                     successfulRecipesAmount++;
+                    totalEarnedMoney += waitingRecipeSO.recipeScore;
                     //print("Player delivered the correct recipe!");
                     waitingRecipeSOList.RemoveAt(i);
 
@@ -116,4 +118,6 @@ public class DeliveryManager : MonoBehaviour
     public int GetSuccessfulRecipesAmount() => successfulRecipesAmount;
 
     public int GetFailedRecipesAmont() => failedRecipesAmount;
+
+    public int GetTotalIncomeAmount() => totalEarnedMoney;
 }

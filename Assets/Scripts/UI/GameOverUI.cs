@@ -6,6 +6,7 @@ public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text recipeDeliveredCountText;
     [SerializeField] private TMP_Text recipeFailedCountText;
+    [SerializeField] private TMP_Text totalIncomeAmountText;
     [SerializeField] private Button replayButton;
     [SerializeField] private Button mainMenuButton;
 
@@ -37,6 +38,7 @@ public class GameOverUI : MonoBehaviour
 
             recipeDeliveredCountText.text = DeliveryManager.Instance.GetSuccessfulRecipesAmount().ToString();
             recipeFailedCountText.text = DeliveryManager.Instance.GetFailedRecipesAmont().ToString();
+            totalIncomeAmountText.text = "$" + DeliveryManager.Instance.GetTotalIncomeAmount().ToString();
         }
         else
         {

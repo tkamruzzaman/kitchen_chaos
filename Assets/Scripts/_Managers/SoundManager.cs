@@ -11,6 +11,10 @@ public class SoundManager : MonoBehaviour
 
     private const string PLAYER_PREFS_SOUND_EFFECTS_VOLUME = "_Key_Sound_Effects_Volume";
 
+    private BaseCounter[] baseCounters;
+    private CuttingCounter[] cuttingCounters;
+    private TrashCounter[] trashCounters;
+
     private void Awake()
     {
         Instance = this;
@@ -23,9 +27,22 @@ public class SoundManager : MonoBehaviour
         Player.Instance.OnPickedSomthing += Player_OnPickedSomthing;
         DeliveryManager.Instance.OnRecipeSuccess += DeliveryManager_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed += DeliveryManager_OnRecipeFailed;
-        BaseCounter.OnAnyObjectPlaced += BaseCounter_OnAnyObjectPlaced;
-        CuttingCounter.OnAnyInteraction += CuttingCounter_OnAnyInteraction;
-        TrashCounter.OnAnyObjectTrashed += TrashCounter_OnAnyObjectTrashed;
+
+        baseCounters = FindObjectsOfType<BaseCounter>();
+        foreach (BaseCounter baseCounter in baseCounters)
+        {
+            baseCounter.OnAnyObjectPlaced += BaseCounter_OnAnyObjectPlaced;
+        }
+        cuttingCounters = FindObjectsOfType<CuttingCounter>();
+        foreach (CuttingCounter cuttingCounter in cuttingCounters)
+        {
+            cuttingCounter.OnAnyInteraction += CuttingCounter_OnAnyInteraction;
+        }
+        trashCounters = FindObjectsOfType<TrashCounter>();
+        foreach (TrashCounter trashCounter in trashCounters)
+        {
+            trashCounter.OnAnyObjectTrashed += TrashCounter_OnAnyObjectTrashed;
+        }
     }
 
     private void OnDestroy()
@@ -33,32 +50,23 @@ public class SoundManager : MonoBehaviour
         Player.Instance.OnPickedSomthing -= Player_OnPickedSomthing;
         DeliveryManager.Instance.OnRecipeSuccess -= DeliveryManager_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed -= DeliveryManager_OnRecipeFailed;
-        BaseCounter.OnAnyObjectPlaced -= BaseCounter_OnAnyObjectPlaced;
-        CuttingCounter.OnAnyInteraction -= CuttingCounter_OnAnyInteraction;
-        TrashCounter.OnAnyObjectTrashed -= TrashCounter_OnAnyObjectTrashed;
-    }
-
-    private void TrashCounter_OnAnyObjectTrashed(object sender, EventArgs e)
-    {
-        TrashCounter trashCounter = (TrashCounter)sender;
-        PlaySound(audioClipReferencesSO.trash, trashCounter.transform.position);
-    }
-
-    private void BaseCounter_OnAnyObjectPlaced(object sender, EventArgs e)
-    {
-        BaseCounter baseCounter = (BaseCounter)sender;
-        PlaySound(audioClipReferencesSO.objectDrop, baseCounter.transform.position);
+        foreach (BaseCounter baseCounter in baseCounters)
+        {
+            baseCounter.OnAnyObjectPlaced -= BaseCounter_OnAnyObjectPlaced;
+        }
+        foreach (CuttingCounter cuttingCounter in cuttingCounters)
+        {
+            cuttingCounter.OnAnyInteraction -= CuttingCounter_OnAnyInteraction;
+        }
+        foreach (TrashCounter trashCounter in trashCounters)
+        {
+            trashCounter.OnAnyObjectTrashed -= TrashCounter_OnAnyObjectTrashed;
+        }
     }
 
     private void Player_OnPickedSomthing(object sender, EventArgs e)
     {
         PlaySound(audioClipReferencesSO.objectPickup, Player.Instance.transform.position);
-    }
-
-    private void CuttingCounter_OnAnyInteraction(object sender, EventArgs e)
-    {
-        CuttingCounter cuttingCounter = (CuttingCounter)sender;
-        PlaySound(audioClipReferencesSO.chop, cuttingCounter.transform.position);
     }
 
     private void DeliveryManager_OnRecipeSuccess(object sender, DeliveryManager.OnRecipeSuccessEventArgs e)
@@ -73,14 +81,27 @@ public class SoundManager : MonoBehaviour
         PlaySound(audioClipReferencesSO.deliveryFail, deliveryCounter.transform.position);
     }
 
-    private void PlaySound(AudioClip audioClip, Vector3 position, float volumeMultiplier = 1f)
+    private void BaseCounter_OnAnyObjectPlaced(object sender, EventArgs e)
     {
-        AudioSource.PlayClipAtPoint(audioClip, position, volume * volumeMultiplier);
+        BaseCounter baseCounter = (BaseCounter)sender;
+        PlaySound(audioClipReferencesSO.objectDrop, baseCounter.transform.position);
     }
 
-    private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
+    private void CuttingCounter_OnAnyInteraction(object sender, EventArgs e)
     {
-        PlaySound(audioClipArray[UnityEngine.Random.Range(0, audioClipArray.Length)], position, volume);
+        CuttingCounter cuttingCounter = (CuttingCounter)sender;
+        PlaySound(audioClipReferencesSO.chop, cuttingCounter.transform.position);
+    }
+
+    private void TrashCounter_OnAnyObjectTrashed(object sender, TrashCounter.OnAnyObjectTrashedEventArgs e)
+    {
+        TrashCounter trashCounter = (TrashCounter)sender;
+        KitchenObject kitchenObject = e.kitchenObject;
+
+        AudioClip audioClip = kitchenObject is PlateKitchenObject ? audioClipReferencesSO.trash[0] 
+            : audioClipReferencesSO.trash[^1];
+
+        PlaySound(audioClip, trashCounter.transform.position);
     }
 
     public void PlayFootStepSound(Vector3 position, float volume)
@@ -96,6 +117,15 @@ public class SoundManager : MonoBehaviour
     public void PlayWarningSound(Vector3 position)
     {
         PlaySound(audioClipReferencesSO.warning, position);
+    }
+
+    private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
+    {
+        PlaySound(audioClipArray[UnityEngine.Random.Range(0, audioClipArray.Length)], position, volume);
+    }
+    private void PlaySound(AudioClip audioClip, Vector3 position, float volumeMultiplier = 1f)
+    {
+        AudioSource.PlayClipAtPoint(audioClip, position, volume * volumeMultiplier);
     }
 
     public void ChangeVolume()

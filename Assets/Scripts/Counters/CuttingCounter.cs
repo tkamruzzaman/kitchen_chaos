@@ -4,13 +4,8 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IHasProgress
 {
-    new public static void ResetStaticData()
-    {
-        OnAnyInteraction = null;
-    }
-
     public event EventHandler OnInteracted;
-    public static event EventHandler OnAnyInteraction;
+    public event EventHandler OnAnyInteraction;
 
     public event EventHandler<IHasProgress.OnProgessChangedEventArgs> OnProgessChanged;
 

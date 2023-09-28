@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class KitchenObject : MonoBehaviour
@@ -8,10 +6,14 @@ public class KitchenObject : MonoBehaviour
 
     private IKitchenObjectParent kitchenObjectParent;
 
-    public KitchenObjectSO GetKitchenObjectSO()
+    private FollowTransform followTransform;
+
+    private void Awake()
     {
-        return kitchenObjectSO;
+        followTransform = GetComponent<FollowTransform>();
     }
+
+    public KitchenObjectSO GetKitchenObjectSO() => kitchenObjectSO;
 
     public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
     {
@@ -25,14 +27,10 @@ public class KitchenObject : MonoBehaviour
         }
         kitchenObjectParent.SetKitchenObject(this);
 
-        transform.SetParent(kitchenObjectParent.GetKitchenObjectFollowTransform());
-        transform.localPosition = Vector3.zero;
+        followTransform.SetTragetTransform(kitchenObjectParent.GetKitchenObjectFollowTransform());
     }
 
-    public IKitchenObjectParent GetKitchenObjectParent()
-    {
-        return kitchenObjectParent;
-    }
+    public IKitchenObjectParent GetKitchenObjectParent() => kitchenObjectParent;
 
     public void DestroySelf()
     {
@@ -42,9 +40,9 @@ public class KitchenObject : MonoBehaviour
 
     public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)
     {
-        if(this is PlateKitchenObject)
+        if (this is PlateKitchenObject)
         {
-            plateKitchenObject = this as  PlateKitchenObject;
+            plateKitchenObject = this as PlateKitchenObject;
             return true;
         }
         else
@@ -59,7 +57,7 @@ public class KitchenObject : MonoBehaviour
         Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
         KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
         kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
-       
+
         return kitchenObject;
     }
 }

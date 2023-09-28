@@ -4,12 +4,7 @@ using UnityEngine;
 [SelectionBase]
 public abstract class BaseCounter : MonoBehaviour, IKitchenObjectParent
 {
-    public static event EventHandler OnAnyObjectPlaced;
-
-    public static void ResetStaticData()
-    {
-        OnAnyObjectPlaced = null;
-    }
+    public EventHandler OnAnyObjectPlaced;
 
     [SerializeField] private Transform kitchenObjectHoldPoint;
     private KitchenObject kitchenObject;

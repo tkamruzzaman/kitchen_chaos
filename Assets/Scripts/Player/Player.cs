@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [SelectionBase]
@@ -18,7 +19,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private Vector3 spawnPosition; 
+    [SerializeField] private List<Vector3> spawnPositions;
     [SerializeField] private Vector3 spawnRotation;
     [SerializeField] private LayerMask countersLayerMask;
 
@@ -45,7 +46,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         gameInput.OnInteractAction += GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
 
-        transform.SetPositionAndRotation(spawnPosition, Quaternion.Euler(spawnRotation));
+        transform.SetPositionAndRotation(spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Count)], Quaternion.Euler(spawnRotation));
     }
 
     private void OnDestroy()

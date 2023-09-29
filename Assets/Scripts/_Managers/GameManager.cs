@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     private State state;
 
-    private float countdownToStartTimer = 3f;
+    private float countdownToStartTimer = 1f; //3f;
     private float gamePlayingTimer;
     [Range(10, 300)]
     [SerializeField] private float gamePlayingTimerMax = 90f;
@@ -40,6 +40,10 @@ public class GameManager : MonoBehaviour
 
         gameInput.OnPauseAction += GameInput_OnPauseAction;
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+
+        //FIX_ME: For Testing
+        state = State.CountdownToStart;
+        OnStateChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private void GameInput_OnInteractAction(object sender, EventArgs e)

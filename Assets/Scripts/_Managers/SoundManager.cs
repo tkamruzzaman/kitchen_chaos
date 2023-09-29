@@ -24,7 +24,7 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
-        Player.Instance.OnPickedSomthing += Player_OnPickedSomthing;
+        //Player.Instance.OnPickedSomthing += Player_OnPickedSomthing;
         DeliveryManager.Instance.OnRecipeSuccess += DeliveryManager_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed += DeliveryManager_OnRecipeFailed;
 
@@ -47,7 +47,7 @@ public class SoundManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        Player.Instance.OnPickedSomthing -= Player_OnPickedSomthing;
+        //Player.Instance.OnPickedSomthing -= Player_OnPickedSomthing;
         DeliveryManager.Instance.OnRecipeSuccess -= DeliveryManager_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed -= DeliveryManager_OnRecipeFailed;
         foreach (BaseCounter baseCounter in baseCounters)
@@ -66,7 +66,7 @@ public class SoundManager : MonoBehaviour
 
     private void Player_OnPickedSomthing(object sender, EventArgs e)
     {
-        PlaySound(audioClipReferencesSO.objectPickup, Player.Instance.transform.position);
+        //PlaySound(audioClipReferencesSO.objectPickup, Player.Instance.transform.position);
     }
 
     private void DeliveryManager_OnRecipeSuccess(object sender, DeliveryManager.OnRecipeSuccessEventArgs e)

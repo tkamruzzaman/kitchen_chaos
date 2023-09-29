@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class MusicManager : MonoBehaviour
 {
@@ -19,8 +18,8 @@ public class MusicManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
         volume = PlayerPrefs.GetFloat(PLAYER_PREFS_MUSIC_VOLUME, volume);
-        
-        audioSource.volume = volume;
+
+        audioSource.volume = 0;//volume;
     }
 
     public void ChangeVolume()

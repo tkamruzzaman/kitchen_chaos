@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 [SelectionBase]
-public class Player : MonoBehaviour, IKitchenObjectParent
+public class Player : NetworkBehaviour, IKitchenObjectParent
 {
-    public static Player Instance { get; private set; }
+    //public static Player Instance { get; private set; }
 
     public event EventHandler OnPickedSomthing;
 
@@ -35,8 +36,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void Awake()
     {
-        if (Instance == null) { Instance = this; }
-        else { Debug.LogError("There is more than one Player instance"); }
+        // Instance = this; 
     }
 
     private void Start()
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         transform.SetPositionAndRotation(spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Count)], Quaternion.Euler(spawnRotation));
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         gameInput.OnInteractAction -= GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction -= GameInput_OnInteractAlternateAction;

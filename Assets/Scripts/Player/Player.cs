@@ -34,6 +34,8 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
     [SerializeField] private Transform kitchenObjectHoldPoint;
     private KitchenObject kitchenObject;
 
+    private const float ROTATION_EPSILON = 0.001f;
+
     private void Awake()
     {
         // Instance = this; 
@@ -77,6 +79,8 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
     private void Update()
     {
+        if (!IsOwner) { return; }
+
         if (GameManager.Instance.IsWaitingToStart() 
             || GameManager.Instance.IsGameOver()) { return; }
 
@@ -95,8 +99,6 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
         bool canMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius,
             moveDirection, Quaternion.identity, moveDistance, countersLayerMask);
-
-        isWalking = moveDirection != Vector3.zero;
 
         //testing can we move on one direction in diagonal movement
         if (!canMove)
@@ -139,7 +141,17 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
             transform.position += moveDistance * moveDirection;
         }
 
-        transform.forward = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
+        isWalking = moveDirection != Vector3.zero;
+
+        Vector3 rotation = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
+        
+        if (rotation.Equals(Vector3.zero) || rotation.sqrMagnitude < ROTATION_EPSILON)
+        {
+            return;
+        }
+
+        transform.forward = rotation;
+
     }
 
     private void HandleInterection()

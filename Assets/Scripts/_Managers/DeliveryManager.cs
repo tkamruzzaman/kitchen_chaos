@@ -139,8 +139,7 @@ public class DeliveryManager : NetworkBehaviour
         }
         else
         {
-            // Target not found on server, likely because it already has been destroyed/despawned.
-            Debug.LogError("Target not found on server, likely because it already has been destroyed/despawned");
+            Debug.LogError("DeliveryCounterReference not found on server, likely because it already has been destroyed/despawned");
         }
 
     }
@@ -167,8 +166,7 @@ public class DeliveryManager : NetworkBehaviour
         }
         else
         {
-            // Target not found on server, likely because it already has been destroyed/despawned.
-            Debug.LogError("Target not found on server, likely because it already has been destroyed/despawned");
+            Debug.LogError("DeliveryCounterReference not found on server, likely because it already has been destroyed/despawned");
         }
     }
 

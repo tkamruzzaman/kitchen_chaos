@@ -6,7 +6,10 @@ using UnityEngine;
 [SelectionBase]
 public class Player : NetworkBehaviour, IKitchenObjectParent
 {
-    //public static Player Instance { get; private set; }
+    public static Player LocalInstance { get; private set; }
+
+    public static event EventHandler OnAnyPlayerSpawned;
+    public static event EventHandler OnAnyPlayerPickedSomthing;
 
     public event EventHandler OnPickedSomthing;
 
@@ -36,11 +39,6 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
     private const float ROTATION_EPSILON = 0.001f;
 
-    private void Awake()
-    {
-        // Instance = this; 
-    }
-
     private void Start()
     {
         gameInput = FindObjectOfType<GameInput>();
@@ -51,8 +49,20 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         transform.SetPositionAndRotation(spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Count)], Quaternion.Euler(spawnRotation));
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (IsOwner)
+        {
+            LocalInstance = this;
+        }
+
+        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
+    }
+
     public override void OnDestroy()
     {
+        OnAnyPlayerSpawned = null;
         gameInput.OnInteractAction -= GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction -= GameInput_OnInteractAlternateAction;
     }
@@ -204,6 +214,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         if (kitchenObject != null)
         {
             OnPickedSomthing?.Invoke(this, EventArgs.Empty);
+            OnAnyPlayerPickedSomthing?.Invoke(this, EventArgs.Empty);
         }
     }
 

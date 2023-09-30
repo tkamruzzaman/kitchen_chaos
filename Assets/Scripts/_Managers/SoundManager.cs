@@ -24,7 +24,7 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
-        //Player.Instance.OnPickedSomthing += Player_OnPickedSomthing;
+        Player.OnAnyPlayerPickedSomthing += Player_OnAnyPlayerPickedSomthing;
         DeliveryManager.Instance.OnRecipeSuccess += DeliveryManager_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed += DeliveryManager_OnRecipeFailed;
 
@@ -64,9 +64,10 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    private void Player_OnPickedSomthing(object sender, EventArgs e)
+    private void Player_OnAnyPlayerPickedSomthing(object sender, EventArgs e)
     {
-        //PlaySound(audioClipReferencesSO.objectPickup, Player.Instance.transform.position);
+        Player player = sender as Player;
+        PlaySound(audioClipReferencesSO.objectPickup, player.transform.position);
     }
 
     private void DeliveryManager_OnRecipeSuccess(object sender, DeliveryManager.OnRecipeSuccessEventArgs e)

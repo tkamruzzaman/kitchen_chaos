@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class ContainerCounter : BaseCounter
@@ -13,8 +14,7 @@ public class ContainerCounter : BaseCounter
         {
             //player is not carrying anytging
             KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
-
-            OnInteracted?.Invoke(this, EventArgs.Empty);
+            InteractLogicServerRpc();
         }
         else
         {
@@ -24,11 +24,23 @@ public class ContainerCounter : BaseCounter
                 //player is holding a Plate
                 if (plateKitchenObject.TryAddIngredient(kitchenObjectSO))
                 {
-                    //placing valid kitchenObjectSO item on the plate
-                    OnInteracted?.Invoke(this, EventArgs.Empty);
+                    //placing valid kitchenObjectSO (Bread) item on the plate
+                    InteractLogicServerRpc();
                 }
             }
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void InteractLogicServerRpc()
+    {
+        InteractLogicClientRpc();
+    }
+
+    [ClientRpc]
+    private void InteractLogicClientRpc()
+    {
+        OnInteracted?.Invoke(this, EventArgs.Empty);
     }
 
     public override void InteractAlternate(Player player)

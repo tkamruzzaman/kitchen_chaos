@@ -225,4 +225,6 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
     public void ClearKitchenObject() => kitchenObject = null;
 
     public bool HasKitchenObject() => kitchenObject != null;
+
+    public NetworkObject GetNetworkObject() => NetworkObject;
 }

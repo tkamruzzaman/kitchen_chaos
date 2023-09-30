@@ -115,13 +115,21 @@ public class DeliveryManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void DeliverCorrectRecipeServerRpc(int waitingRecipeSOListIndex, int waitingRecipeScore, NetworkObjectReference deliveryCounterReference)
+    private void DeliverCorrectRecipeServerRpc(
+        int waitingRecipeSOListIndex, 
+        int waitingRecipeScore, 
+        NetworkObjectReference deliveryCounterReference)
     {
-        DeliverCorrectRecipeClientRpc(waitingRecipeSOListIndex, waitingRecipeScore, deliveryCounterReference);
+        DeliverCorrectRecipeClientRpc(waitingRecipeSOListIndex, 
+            waitingRecipeScore, 
+            deliveryCounterReference);
     }
 
     [ClientRpc]
-    private void DeliverCorrectRecipeClientRpc(int waitingRecipeSOListIndex, int waitingRecipeScore, NetworkObjectReference deliveryCounterReference)
+    private void DeliverCorrectRecipeClientRpc(
+        int waitingRecipeSOListIndex, 
+        int waitingRecipeScore, 
+        NetworkObjectReference deliveryCounterReference)
     {
         if (deliveryCounterReference.TryGet(out NetworkObject deliveryCounterNetworkObject))
         {

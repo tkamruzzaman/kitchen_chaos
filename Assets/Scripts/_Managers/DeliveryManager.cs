@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class DeliveryManager : MonoBehaviour
+public class DeliveryManager : NetworkBehaviour
 {
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
@@ -22,7 +23,7 @@ public class DeliveryManager : MonoBehaviour
     [SerializeField] private RecipeListSO recipeListSO;
     private List<RecipeSO> waitingRecipeSOList = new List<RecipeSO>();
 
-    private float spawnRecipeTimer;
+    private float spawnRecipeTimer = 4f;  //FIX_ME 0 is the value
     private float spawnRecipeTimerMax = 4f;
     private int waitingRecipesMax = 4;
 
@@ -37,6 +38,8 @@ public class DeliveryManager : MonoBehaviour
 
     private void Update()
     {
+        if (!IsServer) { return; }
+
         spawnRecipeTimer -= Time.deltaTime;
 
         if (spawnRecipeTimer <= 0)
@@ -45,17 +48,26 @@ public class DeliveryManager : MonoBehaviour
 
             if (GameManager.Instance.IsGamePlaying() && waitingRecipeSOList.Count < waitingRecipesMax)
             {
-                RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
+                int watingRecipeSOIndex = UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count);
+                RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[watingRecipeSOIndex];
 
-                waitingRecipeSOList.Add(waitingRecipeSO);
-
-                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
+                SpawnNewWaitingRecipeClientRpc(watingRecipeSOIndex);           
             }
         }
     }
 
+    [ClientRpc]
+    private void SpawnNewWaitingRecipeClientRpc(int watingRecipeSOIndex)
+    {
+        RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[watingRecipeSOIndex];
+        waitingRecipeSOList.Add(waitingRecipeSO);
+        OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
+    }
+
     public void DeliverRecipe(DeliveryCounter deliveryCounter, PlateKitchenObject plateKitchenObject)
     {
+        NetworkObject deliveryCounterReference = null;
+
         for (int i = 0; i < waitingRecipeSOList.Count; i++)
         {
             RecipeSO waitingRecipeSO = waitingRecipeSOList[i];
@@ -88,29 +100,76 @@ public class DeliveryManager : MonoBehaviour
                 if (plateContentsMatchesRecipe)
                 {
                     //Player deliver the correct recipe!
-                    successfulRecipesAmount++;
-                    totalEarnedMoney += waitingRecipeSO.recipeScore;
-                    //print("Player delivered the correct recipe!");
-                    waitingRecipeSOList.RemoveAt(i);
+                    deliveryCounterReference = deliveryCounter.GetComponent<NetworkObject>();
+                    int waitingRecipeScore = waitingRecipeSO.recipeScore;
 
-                    OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
-                    OnRecipeSuccess?.Invoke(this, new OnRecipeSuccessEventArgs
-                    {
-                        deliveryCounter = deliveryCounter
-                    });
+                    DeliverCorrectRecipeServerRpc(i, waitingRecipeScore, deliveryCounterReference);
                     return;
                 }
             }
         }
         //No matches found!
         //Player did not deliver a correct recipe
-        //print("Player did not deliver a correct recipe");
-        failedRecipesAmount++;
+        deliveryCounterReference = deliveryCounter.GetComponent<NetworkObject>();
+        DeliverIncorrectRecipeServerRpc(deliveryCounterReference);
+    }
 
-        OnRecipeFailed?.Invoke(this, new OnRecipeFailedEventArgs
+    [ServerRpc(RequireOwnership = false)]
+    private void DeliverCorrectRecipeServerRpc(int waitingRecipeSOListIndex, int waitingRecipeScore, NetworkObjectReference deliveryCounterReference)
+    {
+        DeliverCorrectRecipeClientRpc(waitingRecipeSOListIndex, waitingRecipeScore, deliveryCounterReference);
+    }
+
+    [ClientRpc]
+    private void DeliverCorrectRecipeClientRpc(int waitingRecipeSOListIndex, int waitingRecipeScore, NetworkObjectReference deliveryCounterReference)
+    {
+        if (deliveryCounterReference.TryGet(out NetworkObject deliveryCounterNetworkObject))
         {
-            deliveryCounter = deliveryCounter
-        });
+            DeliveryCounter deliveryCounter = deliveryCounterNetworkObject.GetComponent<DeliveryCounter>();
+
+            successfulRecipesAmount++;
+            totalEarnedMoney += waitingRecipeScore;
+            waitingRecipeSOList.RemoveAt(waitingRecipeSOListIndex);
+
+            OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+            OnRecipeSuccess?.Invoke(this, new OnRecipeSuccessEventArgs
+            {
+                deliveryCounter = deliveryCounter
+            });
+        }
+        else
+        {
+            // Target not found on server, likely because it already has been destroyed/despawned.
+            Debug.LogError("Target not found on server, likely because it already has been destroyed/despawned");
+        }
+
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DeliverIncorrectRecipeServerRpc(NetworkObjectReference deliveryCounterReference)
+    {
+        DeliverIncorrectRecipeClientRpc(deliveryCounterReference);
+    }
+
+    [ClientRpc]
+    private void DeliverIncorrectRecipeClientRpc(NetworkObjectReference deliveryCounterReference)
+    {
+        if (deliveryCounterReference.TryGet(out NetworkObject deliveryCounterNetworkObject))
+        {
+            DeliveryCounter deliveryCounter = deliveryCounterNetworkObject.GetComponent<DeliveryCounter>();
+
+            failedRecipesAmount++;
+
+            OnRecipeFailed?.Invoke(this, new OnRecipeFailedEventArgs
+            {
+                deliveryCounter = deliveryCounter
+            });
+        }
+        else
+        {
+            // Target not found on server, likely because it already has been destroyed/despawned.
+            Debug.LogError("Target not found on server, likely because it already has been destroyed/despawned");
+        }
     }
 
     public List<RecipeSO> GetWaitingRecipeSOList() => waitingRecipeSOList;

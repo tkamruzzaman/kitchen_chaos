@@ -31,8 +31,11 @@ public class SelectedCounterVisual : MonoBehaviour
 
     private void OnDestroy()
     {
-        Player.LocalInstance.OnSelectedCounterChanged -= Player_OnSelectedCounterChanged;
-        Player.OnAnyPlayerSpawned -= Player_OnAnyPlayerSpawned;
+        if (Player.LocalInstance != null)
+        {
+            Player.LocalInstance.OnSelectedCounterChanged -= Player_OnSelectedCounterChanged;
+            Player.OnAnyPlayerSpawned -= Player_OnAnyPlayerSpawned;
+        }
     }
 
     private void Player_OnAnyPlayerSpawned(object sender, System.EventArgs e)

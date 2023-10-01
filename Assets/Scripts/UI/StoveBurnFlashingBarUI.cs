@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StoveBurnFlashingBarUI : MonoBehaviour
@@ -22,7 +20,11 @@ public class StoveBurnFlashingBarUI : MonoBehaviour
         stoveCounter.OnProgessChanged += StoveCounter_OnProgessChanged;
 
         animator.SetBool(IS_FLASHING, false);
+    }
 
+    private void OnDestroy()
+    {
+        stoveCounter.OnProgessChanged -= StoveCounter_OnProgessChanged;
     }
 
     private void StoveCounter_OnProgessChanged(object sender, IHasProgress.OnProgessChangedEventArgs e)

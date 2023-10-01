@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance { get; private set; }
 
@@ -16,11 +18,12 @@ public class GameManager : MonoBehaviour
     public event EventHandler OnStateChanged;
     public event EventHandler OnGamePaused;
     public event EventHandler OnGameUnpaused;
+    public event EventHandler OnLocalPlayerReady;
 
-    private State state;
-
-    private float countdownToStartTimer = 1f; //3f;
-    private float gamePlayingTimer;
+    private NetworkVariable<State> state = new(State.WaitingToStart);
+    private bool isLocalPlayerReady;
+    private NetworkVariable<float> countdownToStartTimer = new(3f);
+    private NetworkVariable<float> gamePlayingTimer = new(0f);
     [Range(10, 300)]
     [SerializeField] private float gamePlayingTimerMax = 90f;
 
@@ -28,10 +31,13 @@ public class GameManager : MonoBehaviour
 
     private bool isGamePaused;
 
+    private Dictionary<ulong, bool> playersReadyDictionary = new();
+
     private void Awake()
     {
         Instance = this;
-        state = State.WaitingToStart;
+
+        playersReadyDictionary.Clear();
     }
 
     private void Start()
@@ -40,20 +46,53 @@ public class GameManager : MonoBehaviour
 
         gameInput.OnPauseAction += GameInput_OnPauseAction;
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+    }
 
-        //FIX_ME: For Testing
-        state = State.CountdownToStart;
+    public override void OnNetworkSpawn()
+    {
+        state.OnValueChanged += State_OnValueChanged;
+    }
+
+    private void State_OnValueChanged(State previousValue, State currentValue)
+    {
         OnStateChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private void GameInput_OnInteractAction(object sender, EventArgs e)
     {
-        if(state == State.WaitingToStart)
+        if(state.Value == State.WaitingToStart)
         {
-            state = State.CountdownToStart;
-            OnStateChanged?.Invoke(this, EventArgs.Empty);
+            isLocalPlayerReady = true;
+            OnLocalPlayerReady?.Invoke(this, EventArgs.Empty);
+            
+            SetPlayerReadyServerRpc();
         }
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        playersReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
+
+        bool allClientsReady = true;
+
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            if (!playersReadyDictionary.ContainsKey(clientId)
+                || !playersReadyDictionary[clientId])
+            {
+                //the player with clientId is not ready
+                allClientsReady = false;
+                break;
+            }
+        }
+
+        if(allClientsReady)
+        {
+            state.Value = State.CountdownToStart;
+        }
+    }
+
 
     private void GameInput_OnPauseAction(object sender, EventArgs e)
     {
@@ -62,29 +101,29 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        switch (state)
+        if (!IsServer) { return; }
+
+        switch (state.Value)
         {
             case State.WaitingToStart: 
                 break;
 
             case State.CountdownToStart:
 
-                countdownToStartTimer -= Time.deltaTime;
-                if (countdownToStartTimer < 0f)
+                countdownToStartTimer.Value -= Time.deltaTime;
+                if (countdownToStartTimer.Value < 0f)
                 {
-                    state = State.GamePlaying;
-                    gamePlayingTimer = gamePlayingTimerMax;
-                    OnStateChanged?.Invoke(this, EventArgs.Empty);
+                    state.Value = State.GamePlaying;
+                    gamePlayingTimer.Value = gamePlayingTimerMax;
                 }
                 break;
 
             case State.GamePlaying:
 
-                gamePlayingTimer -= Time.deltaTime;
-                if (gamePlayingTimer < 0f)
+                gamePlayingTimer.Value -= Time.deltaTime;
+                if (gamePlayingTimer.Value < 0f)
                 {
-                    state = State.GameOver;
-                    OnStateChanged?.Invoke(this, EventArgs.Empty);
+                    state.Value = State.GameOver;
                 }
                 break;
 
@@ -93,25 +132,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool IsWaitingToStart() => state == State.WaitingToStart;
+    public bool IsWaitingToStart() => state.Value == State.WaitingToStart;
 
-    public bool IsCountdownToStartActive() => state == State.CountdownToStart;
+    public bool IsCountdownToStartActive() => state.Value == State.CountdownToStart;
     
-    public bool IsGamePlaying() => state == State.GamePlaying;
+    public bool IsGamePlaying() => state.Value == State.GamePlaying;
 
-    public bool IsGameOver() => state == State.GameOver;
+    public bool IsGameOver() => state.Value == State.GameOver;
+
+    public bool IsLocalPlayerReady() => isLocalPlayerReady;
     
-    public float GetCountdownToStartTimer() => countdownToStartTimer;
+    public float GetCountdownToStartTimer() => countdownToStartTimer.Value;
 
-    public float GetGamePlayingTimerNormalized()
-    {
-        return 1 - (gamePlayingTimer / gamePlayingTimerMax);
-    }
+    public float GetGamePlayingTimerNormalized() => 1 - (gamePlayingTimer.Value / gamePlayingTimerMax);
 
-    public float GetGamePlayingTime()
-    {
-        return gamePlayingTimer;
-    }
+    public float GetGamePlayingTime() => gamePlayingTimer.Value;
 
     public void TogglePauseGame()
     {
@@ -129,9 +164,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         gameInput.OnPauseAction -= GameInput_OnPauseAction;
         gameInput.OnInteractAction -= GameInput_OnInteractAction;
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        if(!IsServer) { return; }
+
+        state.OnValueChanged -= State_OnValueChanged;
     }
 }

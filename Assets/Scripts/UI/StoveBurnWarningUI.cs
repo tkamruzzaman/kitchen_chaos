@@ -13,6 +13,11 @@ public class StoveBurnWarningUI : MonoBehaviour
         Hide();
     }
 
+    private void OnDestroy()
+    {
+        stoveCounter.OnProgessChanged -= StoveCounter_OnProgessChanged;
+    }
+
     private void StoveCounter_OnProgessChanged(object sender, IHasProgress.OnProgessChangedEventArgs e)
     {
         float burnShowProgressAmount = 0.5f;

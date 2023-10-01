@@ -25,6 +25,11 @@ public class ProgessBarUI : MonoBehaviour
         Hide();
     }
 
+    private void OnDestroy()
+    {
+        hasProgress.OnProgessChanged -= HasProgress_OnProgessChanged;
+    }
+
     private void HasProgress_OnProgessChanged(object sender, IHasProgress.OnProgessChangedEventArgs e)
     {
         progessBarImage.fillAmount = e.progessNormalized;

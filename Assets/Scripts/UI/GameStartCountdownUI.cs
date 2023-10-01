@@ -22,6 +22,11 @@ public class GameStartCountdownUI : MonoBehaviour
         Hide();
     }
 
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnStateChanged -= GameManager_OnStateChanged;
+    }
+
     private void Update()
     {
         int countdownNumber = Mathf.CeilToInt(GameManager.Instance.GetCountdownToStartTimer());

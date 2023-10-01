@@ -1,7 +1,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
-using static DeliveryManager;
+
 
 public class KitchenGameMultiplayer : NetworkBehaviour
 {
@@ -44,4 +44,42 @@ public class KitchenGameMultiplayer : NetworkBehaviour
 
     private KitchenObjectSO GetKitchenObjectSOFromIndex(int kitchenObjectSOIndex) 
         => kitchenObjectListSO.kitchenObjectSOList[kitchenObjectSOIndex];
+
+    
+    public void DestroyKitchenObject(KitchenObject kitchenObject)
+    {
+        DestroyKitchenObjectServerRpc(kitchenObject.NetworkObject);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyKitchenObjectServerRpc(NetworkObjectReference kitchenObjectNetworkObjectReference)
+    {
+        if(kitchenObjectNetworkObjectReference.TryGet(out NetworkObject kitchenObjectNetworkObject))
+        {
+            KitchenObject kitchenObject = kitchenObjectNetworkObject.GetComponent<KitchenObject>();
+            
+            ClearKitchenObjectParentClientRpc(kitchenObjectNetworkObjectReference);
+
+            kitchenObject.DestroySelf();
+        }
+        else
+        {
+            Debug.LogError("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
+        }
+    }
+
+    [ClientRpc]
+    private void ClearKitchenObjectParentClientRpc(NetworkObjectReference kitchenObjectNetworkObjectReference)
+    {
+        if (kitchenObjectNetworkObjectReference.TryGet(out NetworkObject kitchenObjectNetworkObject))
+        {
+            KitchenObject kitchenObject = kitchenObjectNetworkObject.GetComponent<KitchenObject>();
+
+            kitchenObject.ClearKitchenObjectOnParent();
+        }
+        else
+        {
+            Debug.LogError("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
+        }
+    }
 }

@@ -1,4 +1,6 @@
 using System;
+using Unity.Netcode;
+using UnityEngine;
 
 public class TrashCounter : BaseCounter
 {
@@ -13,12 +15,34 @@ public class TrashCounter : BaseCounter
         if (player.HasKitchenObject())
         {
             KitchenObject kitchenObject = player.GetKitchenObject();
-            kitchenObject.DestroySelf();
+            
+            KitchenObject.DestroyKitchenObject(kitchenObject);
+
+            InteractLogicServerRpc(kitchenObject.GetNetworkObject());
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void InteractLogicServerRpc(NetworkObjectReference kitchenObjectNetworkObjectReference)
+    {
+        InteractLogicClientRpc(kitchenObjectNetworkObjectReference);
+    }
+
+    [ClientRpc]
+    private void InteractLogicClientRpc(NetworkObjectReference kitchenObjectNetworkObjectReference)
+    {
+        if (kitchenObjectNetworkObjectReference.TryGet(out NetworkObject kitchenObjectNetworkObject))
+        {
+            KitchenObject kitchenObject = kitchenObjectNetworkObject.GetComponent<KitchenObject>();
 
             OnAnyObjectTrashed?.Invoke(this, new OnAnyObjectTrashedEventArgs
             {
                 kitchenObject = kitchenObject
-            }); 
+            });
+        }
+        else
+        {
+            Debug.LogError("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
         }
     }
 

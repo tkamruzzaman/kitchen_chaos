@@ -66,7 +66,7 @@ public class DeliveryManager : NetworkBehaviour
 
     public void DeliverRecipe(DeliveryCounter deliveryCounter, PlateKitchenObject plateKitchenObject)
     {
-        NetworkObject deliveryCounterReference = null;
+        NetworkObject deliveryCounterNetworkObject = null;
 
         for (int i = 0; i < waitingRecipeSOList.Count; i++)
         {
@@ -100,18 +100,18 @@ public class DeliveryManager : NetworkBehaviour
                 if (plateContentsMatchesRecipe)
                 {
                     //Player deliver the correct recipe!
-                    deliveryCounterReference = deliveryCounter.GetComponent<NetworkObject>();
+                    deliveryCounterNetworkObject = deliveryCounter.GetNetworkObject();
                     int waitingRecipeScore = waitingRecipeSO.recipeScore;
 
-                    DeliverCorrectRecipeServerRpc(i, waitingRecipeScore, deliveryCounterReference);
+                    DeliverCorrectRecipeServerRpc(i, waitingRecipeScore, deliveryCounterNetworkObject);
                     return;
                 }
             }
         }
         //No matches found!
         //Player did not deliver a correct recipe
-        deliveryCounterReference = deliveryCounter.GetComponent<NetworkObject>();
-        DeliverIncorrectRecipeServerRpc(deliveryCounterReference);
+        deliveryCounterNetworkObject = deliveryCounter.GetNetworkObject();
+        DeliverIncorrectRecipeServerRpc(deliveryCounterNetworkObject);
     }
 
     [ServerRpc(RequireOwnership = false)]

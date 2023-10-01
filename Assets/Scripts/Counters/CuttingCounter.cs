@@ -51,7 +51,7 @@ public class CuttingCounter : BaseCounter, IHasProgress
                     // player is holding a Plate
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
                     {
-                        GetKitchenObject().DestroySelf();
+                        KitchenObject.DestroyKitchenObject(GetKitchenObject());
                     }
                 }
             }
@@ -87,7 +87,7 @@ public class CuttingCounter : BaseCounter, IHasProgress
             if (cuttingProgress >= cuttingProgessMax)
             {
                 KitchenObjectSO outputKitchenObjectSO = GetOutputForInput(GetKitchenObject().GetKitchenObjectSO());
-                GetKitchenObject().DestroySelf();
+                KitchenObject.DestroyKitchenObject(GetKitchenObject());
                 KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
             }
         }

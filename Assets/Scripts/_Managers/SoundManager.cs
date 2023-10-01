@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour
         cuttingCounters = FindObjectsOfType<CuttingCounter>();
         foreach (CuttingCounter cuttingCounter in cuttingCounters)
         {
-            cuttingCounter.OnAnyInteraction += CuttingCounter_OnAnyInteraction;
+            cuttingCounter.OnAnyCutInteraction += CuttingCounter_OnAnyInteraction;
         }
         trashCounters = FindObjectsOfType<TrashCounter>();
         foreach (TrashCounter trashCounter in trashCounters)
@@ -56,7 +56,7 @@ public class SoundManager : MonoBehaviour
         }
         foreach (CuttingCounter cuttingCounter in cuttingCounters)
         {
-            cuttingCounter.OnAnyInteraction -= CuttingCounter_OnAnyInteraction;
+            cuttingCounter.OnAnyCutInteraction -= CuttingCounter_OnAnyInteraction;
         }
         foreach (TrashCounter trashCounter in trashCounters)
         {

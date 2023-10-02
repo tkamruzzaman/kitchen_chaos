@@ -79,13 +79,14 @@ public class OptionsUI : MonoBehaviour
     {
         gameInput = FindObjectOfType<GameInput>();
 
-        GameManager.Instance.OnGameUnpaused += GameManger_OnGameUnpaused;
+        GameManager.Instance.OnLocalGameUnpaused += GameManger_OnLocalGameUnpaused;
+        
         UpdateVisual();
         Hide();
         HidePressToRebindKey();
     }
 
-    private void GameManger_OnGameUnpaused(object sender, System.EventArgs e) => Hide();
+    private void GameManger_OnLocalGameUnpaused(object sender, System.EventArgs e) => Hide();
 
     private void UpdateVisual()
     {
@@ -124,5 +125,10 @@ public class OptionsUI : MonoBehaviour
                 HidePressToRebindKey();
                 UpdateVisual();
             });
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnLocalGameUnpaused -= GameManger_OnLocalGameUnpaused;
     }
 }

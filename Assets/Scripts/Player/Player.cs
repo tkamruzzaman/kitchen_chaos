@@ -46,8 +46,6 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
         gameInput.OnInteractAction += GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
-
-        //transform.SetPositionAndRotation(spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Count)], Quaternion.Euler(spawnRotation));
     }
 
     public override void OnNetworkSpawn()
@@ -59,6 +57,11 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         transform.SetPositionAndRotation(spawnPositions[(int)OwnerClientId], Quaternion.Euler(spawnRotation));
 
         OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+        }
     }
 
     public override void OnDestroy()
@@ -85,6 +88,14 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         if (selectedCounter != null)
         {
             selectedCounter.InteractAlternate(this);
+        }
+    }
+
+    private void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    {
+        if(clientId == OwnerClientId && HasKitchenObject())
+        {
+            KitchenObject.DestroyKitchenObject(kitchenObject);
         }
     }
 

@@ -36,7 +36,9 @@ public class GameManager : NetworkBehaviour
 
     private Dictionary<ulong, bool> playersReadyDictionary = new();
     private Dictionary<ulong, bool> playersPauseDictionary = new();
-    
+
+    private bool autoCheckGamePauseState;
+
     private void Awake()
     {
         Instance = this;
@@ -58,6 +60,15 @@ public class GameManager : NetworkBehaviour
         state.OnValueChanged += State_OnValueChanged;
         isGamePaused.OnValueChanged += IsGamePaused_OnValueChanged;
 
+        if(IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+        }
+    }
+
+    private void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    {
+        autoCheckGamePauseState = true;
     }
 
     private void State_OnValueChanged(State previousValue, State currentValue)
@@ -153,6 +164,15 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if(autoCheckGamePauseState)
+        {
+            autoCheckGamePauseState = false;
+            CheckGamePauseState();
+        }
+    }
+
     public bool IsWaitingToStart() => state.Value == State.WaitingToStart;
 
     public bool IsCountdownToStartActive() => state.Value == State.CountdownToStart;
@@ -189,17 +209,17 @@ public class GameManager : NetworkBehaviour
     private void PauseGameServerRpc(ServerRpcParams serverRpcParams = default)
     {
         playersPauseDictionary[serverRpcParams.Receive.SenderClientId] = true;
-        CalculateGamePauseState();
+        CheckGamePauseState();
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void UnpauseGameServerRpc(ServerRpcParams serverRpcParams = default)
     {
         playersPauseDictionary[serverRpcParams.Receive.SenderClientId] = false;
-        CalculateGamePauseState();
+        CheckGamePauseState();
     }
 
-    private void CalculateGamePauseState()
+    private void CheckGamePauseState()
     {
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {

@@ -103,7 +103,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                         state.Value = State.Fried;
                         burningTimer.Value = 0;
 
-                        int kitchenObjectSOIndex = KitchenGameMultiplayer.Instance.GetKitchenObjectIndex(GetKitchenObject().GetKitchenObjectSO());
+                        int kitchenObjectSOIndex = MultiplayerGameManager.Instance.GetKitchenObjectIndex(GetKitchenObject().GetKitchenObjectSO());
                         SetBurningRecipeSOClientRpc(kitchenObjectSOIndex);
                     }
                     break;
@@ -138,7 +138,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                     KitchenObject kitchenObject = player.GetKitchenObject();
                     kitchenObject.SetKitchenObjectParent(this);
 
-                    int kitchenObjectSOIndex = KitchenGameMultiplayer.Instance.GetKitchenObjectIndex(kitchenObject.GetKitchenObjectSO());
+                    int kitchenObjectSOIndex = MultiplayerGameManager.Instance.GetKitchenObjectIndex(kitchenObject.GetKitchenObjectSO());
 
                     InteractLogicPlacedObjectOnStoveServerRpc(kitchenObjectSOIndex);
                 }
@@ -195,14 +195,14 @@ public class StoveCounter : BaseCounter, IHasProgress
     [ClientRpc]
     private void SetFryingRecipeSOClientRpc(int kitchenObjectSOIndex)
     {
-        KitchenObjectSO kitchenObjectSO = KitchenGameMultiplayer.Instance.GetKitchenObjectSOFromIndex(kitchenObjectSOIndex);
+        KitchenObjectSO kitchenObjectSO = MultiplayerGameManager.Instance.GetKitchenObjectSOFromIndex(kitchenObjectSOIndex);
         fryingRecipeSO = GetFryingRecipeSOWithInput(kitchenObjectSO);
     }
 
     [ClientRpc]
     private void SetBurningRecipeSOClientRpc(int kitchenObjectSOIndex)
     {
-        KitchenObjectSO kitchenObjectSO = KitchenGameMultiplayer.Instance.GetKitchenObjectSOFromIndex(kitchenObjectSOIndex);
+        KitchenObjectSO kitchenObjectSO = MultiplayerGameManager.Instance.GetKitchenObjectSOFromIndex(kitchenObjectSOIndex);
         burningRecipeSO = GetBurningRecipeSOWithInput(kitchenObjectSO);
     }
 

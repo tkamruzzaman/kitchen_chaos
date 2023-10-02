@@ -4,10 +4,12 @@ using UnityEngine;
 public class SelectedCounterVisual : MonoBehaviour
 {
     private BaseCounter baseCounter;
-    private List<GameObject> visualGameObjectList = new List<GameObject>();
+    private List<GameObject> visualGameObjectList = new();
 
     private void Awake()
     {
+        visualGameObjectList.Clear();
+
         baseCounter = GetComponentInParent<BaseCounter>();
 
         foreach (Transform child in transform)

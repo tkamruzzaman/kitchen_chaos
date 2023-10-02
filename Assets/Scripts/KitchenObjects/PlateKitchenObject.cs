@@ -31,7 +31,7 @@ public class PlateKitchenObject : KitchenObject
         else
         {
             //unique object
-            int kitchenObjectSOIndex = KitchenGameMultiplayer.Instance.GetKitchenObjectIndex(kitchenObjectSO);
+            int kitchenObjectSOIndex = MultiplayerGameManager.Instance.GetKitchenObjectIndex(kitchenObjectSO);
             IngredientAddedToPlateServerRpc(kitchenObjectSOIndex);        
             return true;
         }
@@ -46,7 +46,7 @@ public class PlateKitchenObject : KitchenObject
     [ClientRpc]
     private void IngredientAddedToPlateClientRpc(int kitchenObjectSOIndex)
     {
-        KitchenObjectSO kitchenObjectSO = KitchenGameMultiplayer.Instance.GetKitchenObjectSOFromIndex(kitchenObjectSOIndex);
+        KitchenObjectSO kitchenObjectSO = MultiplayerGameManager.Instance.GetKitchenObjectSOFromIndex(kitchenObjectSOIndex);
         kitchenObjectSOList.Add(kitchenObjectSO);
         OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs
         {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
@@ -14,6 +15,8 @@ public class GameManager : NetworkBehaviour
         GamePlaying,
         GameOver,
     }
+
+    [SerializeField] private Transform playerPrefab;
 
     public event EventHandler OnStateChanged;
     public event EventHandler OnLocalGamePaused;
@@ -60,15 +63,25 @@ public class GameManager : NetworkBehaviour
         state.OnValueChanged += State_OnValueChanged;
         isGamePaused.OnValueChanged += IsGamePaused_OnValueChanged;
 
-        if(IsServer)
+        if (IsServer)
         {
             NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += NetworkManagerSceneManager_OnLoadEventCompleted;
         }
     }
 
     private void NetworkManager_OnClientDisconnectCallback(ulong clientId)
     {
         autoCheckGamePauseState = true;
+    }
+
+    private void NetworkManagerSceneManager_OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        foreach (ulong clientId in clientsCompleted)
+        {
+            Transform playerTransform = Instantiate(playerPrefab);
+            playerTransform.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        }
     }
 
     private void State_OnValueChanged(State previousValue, State currentValue)
@@ -78,7 +91,7 @@ public class GameManager : NetworkBehaviour
 
     private void IsGamePaused_OnValueChanged(bool previousValue, bool currentValue)
     {
-        if(isGamePaused.Value)
+        if (isGamePaused.Value)
         {
             Time.timeScale = 0f;
             OnMultiplayerGamePaused?.Invoke(this, EventArgs.Empty);
@@ -92,15 +105,16 @@ public class GameManager : NetworkBehaviour
 
     private void GameInput_OnInteractAction(object sender, EventArgs e)
     {
-        if(state.Value == State.WaitingToStart)
+        if (state.Value == State.WaitingToStart)
         {
             isLocalPlayerReady = true;
             OnLocalPlayerReady?.Invoke(this, EventArgs.Empty);
-            
+
             SetPlayerReadyServerRpc();
         }
     }
 
+    
     [ServerRpc(RequireOwnership = false)]
     private void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
@@ -124,6 +138,7 @@ public class GameManager : NetworkBehaviour
             state.Value = State.CountdownToStart;
         }
     }
+    
 
 
     private void GameInput_OnPauseAction(object sender, EventArgs e)
@@ -137,7 +152,7 @@ public class GameManager : NetworkBehaviour
 
         switch (state.Value)
         {
-            case State.WaitingToStart: 
+            case State.WaitingToStart:
                 break;
 
             case State.CountdownToStart:
@@ -166,7 +181,7 @@ public class GameManager : NetworkBehaviour
 
     private void LateUpdate()
     {
-        if(autoCheckGamePauseState)
+        if (autoCheckGamePauseState)
         {
             autoCheckGamePauseState = false;
             CheckGamePauseState();
@@ -176,13 +191,13 @@ public class GameManager : NetworkBehaviour
     public bool IsWaitingToStart() => state.Value == State.WaitingToStart;
 
     public bool IsCountdownToStartActive() => state.Value == State.CountdownToStart;
-    
+
     public bool IsGamePlaying() => state.Value == State.GamePlaying;
 
     public bool IsGameOver() => state.Value == State.GameOver;
 
     public bool IsLocalPlayerReady() => isLocalPlayerReady;
-    
+
     public float GetCountdownToStartTimer() => countdownToStartTimer.Value;
 
     public float GetGamePlayingTimerNormalized() => 1 - (gamePlayingTimer.Value / gamePlayingTimerMax);
@@ -244,10 +259,10 @@ public class GameManager : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-        if(!IsServer) { return; }
+        if (!IsServer) { return; }
 
         state.OnValueChanged -= State_OnValueChanged;
         isGamePaused.OnValueChanged -= IsGamePaused_OnValueChanged;
-        
+
     }
 }

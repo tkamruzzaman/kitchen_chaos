@@ -15,13 +15,13 @@ public class GameOverUI : MonoBehaviour
     {
         replayButton.onClick.AddListener(() =>
         {
-            Loader.Load(Loader.Scene.GameScene);
+            Loader.LoadScene(Loader.Scene.GameScene);
         });
 
         mainMenuButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.Shutdown();
-            Loader.Load(Loader.Scene.MainMenuScene);
+            Loader.LoadScene(Loader.Scene.MainMenuScene);
         });
     }
 

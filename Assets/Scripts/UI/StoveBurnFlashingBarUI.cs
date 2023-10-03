@@ -24,7 +24,7 @@ public class StoveBurnFlashingBarUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        stoveCounter.OnProgessChanged -= StoveCounter_OnProgessChanged;
+        stoveCounter.OnProgessChanged -= StoveCounter_OnProgessChanged; //Fix_Me: some times host disconnects and gives null ref ex
     }
 
     private void StoveCounter_OnProgessChanged(object sender, IHasProgress.OnProgessChangedEventArgs e)

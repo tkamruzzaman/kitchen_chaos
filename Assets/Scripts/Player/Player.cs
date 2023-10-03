@@ -27,6 +27,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
     [SerializeField] private Vector3 spawnRotation;
     [SerializeField] private LayerMask collisionLayerMask;
     [SerializeField] private LayerMask countersLayerMask;
+    [SerializeField] private PlayerVisual playerVisual;
 
     private bool isWalking;
     public bool IsWalking { get => isWalking; private set { isWalking = value; } }
@@ -46,6 +47,9 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
         gameInput.OnInteractAction += GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+
+        PlayerData playerData = MultiplayerGameManager.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        playerVisual.SetPlayerColor(MultiplayerGameManager.Instance.GetPlayerColor(playerData.colorId));
     }
 
     public override void OnNetworkSpawn()
@@ -54,7 +58,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         {
             LocalInstance = this;
         }
-        transform.SetPositionAndRotation(spawnPositions[(int)OwnerClientId], Quaternion.Euler(spawnRotation));
+        transform.SetPositionAndRotation(spawnPositions[MultiplayerGameManager.Instance.GetPlayerDataIndexFromClientId(OwnerClientId)], Quaternion.Euler(spawnRotation));
 
         OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
 

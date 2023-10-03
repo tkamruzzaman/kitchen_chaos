@@ -86,6 +86,7 @@ MonoBehaviour:
   countersLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  playerVisual: {fileID: 753022314787896192}
   kitchenObjectHoldPoint: {fileID: 4285680568368712982}
 --- !u!114 &6092820341807227879
 MonoBehaviour:
@@ -254,6 +255,18 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3511540451286738311}
   m_SourcePrefab: {fileID: 100100000, guid: 1c5dda3c7cd3cf742afcade5419faeab, type: 3}
+--- !u!114 &753022314787896192 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1511593074826358775, guid: 1c5dda3c7cd3cf742afcade5419faeab,
+    type: 3}
+  m_PrefabInstance: {fileID: 2200294474354578551}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3688537184886978640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12099df0af4e7334f8f206ef92fb7a9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3688537184886978640 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3294758251327466535, guid: 1c5dda3c7cd3cf742afcade5419faeab,

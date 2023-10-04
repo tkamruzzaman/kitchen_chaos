@@ -9,14 +9,17 @@ public class CharacterSelectionPlayer : MonoBehaviour
     [Range(0f, 3f)]
     [SerializeField] private int playerIndex;
     [SerializeField] private TMP_Text playerReadyText;
-    [SerializeField] private PlayerVisual playerVisual;
+    [SerializeField] private TMP_Text playerNameText;
     [SerializeField] private Button kickButton;
+    [Space]
+    [SerializeField] private PlayerVisual playerVisual;
 
     private void Awake()
     {
         kickButton.onClick.AddListener(() => 
         {
             PlayerData playerData = MultiplayerGameManager.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+            LobbyManager.Instance.KickPlayer(playerData.playerId.ToString());
             MultiplayerGameManager.Instance.KickPlayer(playerData.clientId);
         });
     }
@@ -48,6 +51,8 @@ public class CharacterSelectionPlayer : MonoBehaviour
             PlayerData playerData = MultiplayerGameManager.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
             playerReadyText.gameObject.SetActive(
                 CharacterSelectionManager.Instance.IsPlayerReady(playerData.clientId));
+            playerNameText.text = playerData.playerName.ToString();
+            
             playerVisual.SetPlayerColor(MultiplayerGameManager.Instance.GetPlayerColor(playerData.colorId));
         }
         else

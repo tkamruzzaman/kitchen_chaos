@@ -5,6 +5,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -45,6 +46,8 @@ public class LobbyManager : MonoBehaviour
 
     private async void HandleHeartbeat()
     {
+        if (SceneManager.GetActiveScene().name != Loader.Scene.LobbyScene.ToString()) { return; }
+
         if (IsLobbyHost())
         {
             heartbeatTimer -= Time.deltaTime;
@@ -67,6 +70,7 @@ public class LobbyManager : MonoBehaviour
 
     private void PriodicallyRefreshLobbyList()
     {
+        if(SceneManager.GetActiveScene().name != Loader.Scene.LobbyScene.ToString()) { return; }
         if(!AuthenticationService.Instance.IsSignedIn) { return; }
         //if player joins a lobby no need to refresh the lobby list
         if (joinedLobby != null) { return; } 

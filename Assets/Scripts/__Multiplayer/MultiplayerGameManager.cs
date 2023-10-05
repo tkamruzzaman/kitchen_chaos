@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 public class MultiplayerGameManager : NetworkBehaviour
 {
     public static MultiplayerGameManager Instance { get; private set; }
+
+    public static bool isToPlaySingleplayer;
 
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailedToJoinGame;
@@ -33,6 +35,16 @@ public class MultiplayerGameManager : NetworkBehaviour
 
         playerDataNetworkList = new();
         playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
+    }
+
+    private void Start()
+    {
+        if(isToPlaySingleplayer)
+        {
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData("127.0.0.1", 7777); 
+            StartHost();
+            Loader.LoadSceneNetwork(Loader.Scene.GameScene);
+        }
     }
 
     private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)

@@ -11,11 +11,6 @@ public class LobbyCreateUI : MonoBehaviour
 
     private void Awake()
     {
-        //lobbyNameInputField.onValueChanged(() =>
-        //{
-
-        //});
-
         createPublicButton.onClick.AddListener(() =>
         {
             LobbyManager.Instance.CreateLobby(lobbyNameInputField.text, false);

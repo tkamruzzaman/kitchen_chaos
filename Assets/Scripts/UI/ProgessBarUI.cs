@@ -10,9 +10,10 @@ public class ProgessBarUI : MonoBehaviour
     private void Awake()
     {
         hasProgress = GetComponentInParent<IHasProgress>();
+
         if (hasProgress == null)
         {
-            Debug.LogError("Doesn't contain IHasProgress interface");
+            Debug.Log("Doesn't contain IHasProgress interface");
         }
     }
 

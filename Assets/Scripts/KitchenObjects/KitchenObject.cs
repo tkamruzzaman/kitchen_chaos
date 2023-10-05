@@ -40,7 +40,7 @@ public class KitchenObject : NetworkBehaviour
 
             if (kitchenObjectParent.HasKitchenObject())
             {
-                Debug.LogError("IKitchenObjectParent already has a KitchenObject!");
+                Debug.Log("IKitchenObjectParent already has a KitchenObject!");
             }
             kitchenObjectParent.SetKitchenObject(this);
 
@@ -48,7 +48,7 @@ public class KitchenObject : NetworkBehaviour
         }
         else
         {
-            Debug.LogError("KitchenObjectParentNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
+            Debug.Log("KitchenObjectParentNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
         }
     }
 
@@ -78,10 +78,7 @@ public class KitchenObject : NetworkBehaviour
         }
     }
 
-    public NetworkObject GetNetworkObject()
-    {
-        return NetworkObject;
-    }
+    public NetworkObject GetNetworkObject() => NetworkObject;
 
     public static void SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent)
     {

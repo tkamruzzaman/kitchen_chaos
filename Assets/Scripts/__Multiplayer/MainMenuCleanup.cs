@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MainMenuCleanup : MonoBehaviour
 {
-
     private void Awake()
     {
         if (NetworkManager.Singleton != null)

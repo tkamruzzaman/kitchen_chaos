@@ -42,7 +42,7 @@ public class TrashCounter : BaseCounter
         }
         else
         {
-            Debug.LogError("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
+            Debug.Log("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
         }
     }
 

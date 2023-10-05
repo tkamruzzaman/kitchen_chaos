@@ -140,20 +140,31 @@ public class MultiplayerGameManager : NetworkBehaviour
     private void SpawnKitchenObjectServerRpc(int kitchenObjectSOIndex, NetworkObjectReference kitchenObjectParentNetworkObjectReference)
     {
         KitchenObjectSO kitchenObjectSO = GetKitchenObjectSOFromIndex(kitchenObjectSOIndex);
+
+        IKitchenObjectParent kitchenObjectParent = null;
+
+        if (kitchenObjectParentNetworkObjectReference.TryGet(out NetworkObject kitchenObjectParentNetworkObject))
+        {
+            kitchenObjectParent = kitchenObjectParentNetworkObject.GetComponent<IKitchenObjectParent>();
+
+            if (kitchenObjectParent == null && kitchenObjectParent.HasKitchenObject())
+            {
+                //parent already spawned an object
+                return;
+            }
+        }
+        else
+        {
+            Debug.Log("KitchenObjectParentNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
+        }
+
         Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
         NetworkObject kitchenObjectNetworkObject = kitchenObjectTransform.GetComponent<NetworkObject>();
         kitchenObjectNetworkObject.Spawn(true);
         KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
 
-        if (kitchenObjectParentNetworkObjectReference.TryGet(out NetworkObject kitchenObjectParentNetworkObject))
-        {
-            IKitchenObjectParent kitchenObjectParent = kitchenObjectParentNetworkObject.GetComponent<IKitchenObjectParent>();
-            kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
-        }
-        else
-        {
-            Debug.LogError("KitchenObjectParentNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
-        }
+
+        kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
     }
 
     public int GetKitchenObjectIndex(KitchenObjectSO kitchenObjectSO)
@@ -173,6 +184,11 @@ public class MultiplayerGameManager : NetworkBehaviour
     {
         if (kitchenObjectNetworkObjectReference.TryGet(out NetworkObject kitchenObjectNetworkObject))
         {
+            if (kitchenObjectNetworkObject == null)
+            {
+                //this object is already destroyed 
+                return;
+            }
             KitchenObject kitchenObject = kitchenObjectNetworkObject.GetComponent<KitchenObject>();
 
             ClearKitchenObjectParentClientRpc(kitchenObjectNetworkObjectReference);
@@ -181,7 +197,7 @@ public class MultiplayerGameManager : NetworkBehaviour
         }
         else
         {
-            Debug.LogError("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
+            Debug.Log("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
         }
     }
 
@@ -196,7 +212,7 @@ public class MultiplayerGameManager : NetworkBehaviour
         }
         else
         {
-            Debug.LogError("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
+            Debug.Log("KitchenObjectNetworkObjectReference not found on server, likely because it already has been destroyed/despawned");
         }
     }
 

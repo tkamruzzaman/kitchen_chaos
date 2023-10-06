@@ -39,6 +39,8 @@ public class LobbyManager : MonoBehaviour
 
     private UnityTransport unityTransport;
 
+    [SerializeField] private bool isToTestMultipleLocalBuild;
+
     private void Awake()
     {
         Instance = this;
@@ -87,6 +89,7 @@ public class LobbyManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name != Loader.Scene.LobbyScene.ToString()) { return; }
         if (!AuthenticationService.Instance.IsSignedIn) { return; }
+
         //if player joins a lobby no need to refresh the lobby list
         if (joinedLobby != null) { return; }
 
@@ -105,7 +108,7 @@ public class LobbyManager : MonoBehaviour
         {
             InitializationOptions initializationOptions = new();
             
-            if (Debug.isDebugBuild)
+            if (Debug.isDebugBuild || isToTestMultipleLocalBuild)
             {
                 initializationOptions.SetProfile(UnityEngine.Random.Range(10000, 100000).ToString());          //testing code for testing multiple builds at once
             }

@@ -331,6 +331,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: fishBones
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2b7003a0e5d74b04c8ec01033e0c6007,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -668,6 +673,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: pizzaCutter
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 67d3ce07e04b3674bb2db931deeddc48,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -684,7 +694,6 @@ GameObject:
   - component: {fileID: 104365871}
   - component: {fileID: 104365870}
   - component: {fileID: 104365869}
-  - component: {fileID: 104365868}
   m_Layer: 0
   m_Name: BlackWall
   m_TagString: Untagged
@@ -692,27 +701,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!65 &104365868
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 104365867}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &104365869
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1029,7 +1017,6 @@ GameObject:
   - component: {fileID: 139790260}
   - component: {fileID: 139790259}
   - component: {fileID: 139790258}
-  - component: {fileID: 139790257}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -1037,27 +1024,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!65 &139790257
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 139790256}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &139790258
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2763,6 +2729,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: cookingFork
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fd34cb677830484bab5d43457c08be6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4538,6 +4509,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: bottleMusterd
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e0d42c186090d284f94d92a7a7c9ccb2,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5834,6 +5810,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Frying Pan
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5cef870fc734b2147b112552f3ff53e4,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6990,6 +6971,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: mortar
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: de2f73c4a34b6a0479ca7d35583040e7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8156,10 +8142,30 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -532782045497273310, guid: f4e9244f6c2792748a84a8a79d5c091a,
         type: 3}
+    - target: {fileID: -1631078346683968531, guid: d0df03a94eeb99444a9c9c61e070b953,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d0df03a94eeb99444a9c9c61e070b953,
         type: 3}
       propertyPath: m_Name
       value: knifeBlock
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d0df03a94eeb99444a9c9c61e070b953,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551365444572426546, guid: d0df03a94eeb99444a9c9c61e070b953,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441890162389662962, guid: d0df03a94eeb99444a9c9c61e070b953,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7689696500111963964, guid: d0df03a94eeb99444a9c9c61e070b953,
         type: 3}
@@ -8380,6 +8386,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: cookingKnifeChopping
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f4e9244f6c2792748a84a8a79d5c091a,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8812,6 +8823,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: cookingSpatula
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d200ba73cef50dc408dcc2165a959da2,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9200,6 +9216,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: cookingSpoon
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 942d3c0126ff71f4dbb4d8b17b334a30,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10493,7 +10514,6 @@ GameObject:
   - component: {fileID: 1046337351}
   - component: {fileID: 1046337350}
   - component: {fileID: 1046337349}
-  - component: {fileID: 1046337348}
   m_Layer: 0
   m_Name: BlackWall
   m_TagString: Untagged
@@ -10501,27 +10521,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!65 &1046337348
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1046337347}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1046337349
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10677,7 +10676,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1052387872
 Transform:
@@ -11656,6 +11655,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: bottleKetchup
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c6871385c040cec42ba9e296284e469e,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12538,7 +12542,6 @@ GameObject:
   - component: {fileID: 1213829414}
   - component: {fileID: 1213829413}
   - component: {fileID: 1213829412}
-  - component: {fileID: 1213829411}
   m_Layer: 0
   m_Name: BlackWall
   m_TagString: Untagged
@@ -12546,27 +12549,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!65 &1213829411
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1213829410}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1213829412
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12725,6 +12707,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: cookingKnife (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: befd18a636ab3104ba5be7e58bada3e5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13581,6 +13568,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: pan
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f651e85464a1d1b4186ca164fb131ee7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13827,6 +13819,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: peanutButter
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a853108b5e185f479fe95fc5b8fe4b1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14065,6 +14062,7 @@ GameObject:
   - component: {fileID: 1392080333}
   - component: {fileID: 1392080332}
   - component: {fileID: 1392080331}
+  - component: {fileID: 1392080335}
   m_Layer: 5
   m_Name: FPS
   m_TagString: Untagged
@@ -14204,6 +14202,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &1392080335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392080330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758fc2f7b4fffe149ac0b6dc87a3dd69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1396352726
 GameObject:
   m_ObjectHideFlags: 0
@@ -14356,7 +14366,6 @@ GameObject:
   - component: {fileID: 1401294534}
   - component: {fileID: 1401294533}
   - component: {fileID: 1401294532}
-  - component: {fileID: 1401294531}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -14364,27 +14373,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!65 &1401294531
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1401294530}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1401294532
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14697,6 +14685,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: meatTenderizer
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 30dbd7045a0d21849ae77d0f0800244b,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15256,7 +15249,6 @@ GameObject:
   - component: {fileID: 1486304848}
   - component: {fileID: 1486304847}
   - component: {fileID: 1486304846}
-  - component: {fileID: 1486304845}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -15264,27 +15256,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!65 &1486304845
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1486304844}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1486304846
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -15455,6 +15426,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: peanutButter (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a853108b5e185f479fe95fc5b8fe4b1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15940,6 +15916,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: fryingPan (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b0910e4eb44a5dc4ea436b13ac320d91,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16076,6 +16057,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: whisk (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a9511a0c89ee3e4285cdf98a722fcf5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16398,6 +16384,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: pepperMill
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 51eefc33f9ac6bd4588c3dc847b12e67,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17293,6 +17284,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: whisk
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a9511a0c89ee3e4285cdf98a722fcf5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17516,6 +17512,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: peanutButter (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a853108b5e185f479fe95fc5b8fe4b1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17538,7 +17539,6 @@ GameObject:
   - component: {fileID: 1820726417}
   - component: {fileID: 1820726416}
   - component: {fileID: 1820726415}
-  - component: {fileID: 1820726414}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -17546,28 +17546,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!64 &1820726414
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1820726413}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1820726415
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -18965,6 +18943,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: cookingKnife
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: befd18a636ab3104ba5be7e58bada3e5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19796,7 +19779,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2002952941
 Transform:
@@ -19930,6 +19913,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: fryingPan
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b0910e4eb44a5dc4ea436b13ac320d91,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20286,6 +20274,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: cookingSpatula (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d200ba73cef50dc408dcc2165a959da2,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20985,6 +20978,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: mortarPestle
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cae91d1fdb79bbf4897a24380fc80dde,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -80,6 +80,11 @@ public class LobbyUI : MonoBehaviour
         }
     }
 
+    public void SetDefaultSelectedButtonForGamepad()
+    {
+        createLobbyButton.Select();
+    }
+
     private void OnDestroy()
     {
         LobbyManager.Instance.OnLobbyListChanged -= LobbyManager_OnLobbyListChanged;

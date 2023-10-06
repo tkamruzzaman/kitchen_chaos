@@ -12,6 +12,7 @@ public class LobbyMessageUI : MonoBehaviour
     {
         closeButton.onClick.AddListener(() =>
         {
+            FindObjectOfType<LobbyUI>().SetDefaultSelectedButtonForGamepad();
             Hide();
         });
     }
@@ -68,7 +69,11 @@ public class LobbyMessageUI : MonoBehaviour
         messageText.text = message;
     }
 
-    private void Show() => gameObject.SetActive(true);
+    private void Show()
+    {
+        gameObject.SetActive(true);
+        closeButton.Select();
+    }
 
     private void Hide() => gameObject.SetActive(false);
 

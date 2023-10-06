@@ -23,6 +23,7 @@ public class LobbyCreateUI : MonoBehaviour
 
         closeButton.onClick.AddListener(() =>
         {
+            FindObjectOfType<LobbyUI>().SetDefaultSelectedButtonForGamepad();
             Hide();
         });
     }
@@ -32,7 +33,11 @@ public class LobbyCreateUI : MonoBehaviour
         Hide();
     }
 
-    public void Show() => gameObject.SetActive(true);
+    public void Show()
+    {
+        gameObject.SetActive(true);
+        createPublicButton.Select();
+    }
 
     private void Hide() => gameObject.SetActive(false);
 }

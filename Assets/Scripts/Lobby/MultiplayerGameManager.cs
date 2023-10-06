@@ -41,7 +41,7 @@ public class MultiplayerGameManager : NetworkBehaviour
     {
         if(isToPlaySingleplayer)
         {
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData("127.0.0.1", 7777); 
+            //NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData("127.0.0.1", 7777); 
             StartHost();
             Loader.LoadSceneNetwork(Loader.Scene.GameScene);
         }

@@ -85,10 +85,10 @@ public class LobbyManager : MonoBehaviour
 
     private void PriodicallyRefreshLobbyList()
     {
-        if(SceneManager.GetActiveScene().name != Loader.Scene.LobbyScene.ToString()) { return; }
-        if(!AuthenticationService.Instance.IsSignedIn) { return; }
+        if (SceneManager.GetActiveScene().name != Loader.Scene.LobbyScene.ToString()) { return; }
+        if (!AuthenticationService.Instance.IsSignedIn) { return; }
         //if player joins a lobby no need to refresh the lobby list
-        if (joinedLobby != null) { return; } 
+        if (joinedLobby != null) { return; }
 
         refreshLobbyListTimer -= Time.deltaTime;
 
@@ -103,9 +103,12 @@ public class LobbyManager : MonoBehaviour
     {
         if (UnityServices.State != ServicesInitializationState.Initialized)
         {
-            InitializationOptions initializationOptions = new InitializationOptions();
-            //initializationOptions.SetProfile(UnityEngine.Random.Range(0, 10000).ToString());          //testing code for testing multiple builds at once
-
+            InitializationOptions initializationOptions = new();
+            
+            if (Debug.isDebugBuild)
+            {
+                initializationOptions.SetProfile(UnityEngine.Random.Range(10000, 100000).ToString());          //testing code for testing multiple builds at once
+            }
             await UnityServices.InitializeAsync(initializationOptions);
 
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
@@ -221,7 +224,7 @@ public class LobbyManager : MonoBehaviour
         try
         {
             joinedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode);
-            
+
             string relayJoinCode = joinedLobby.Data[KEY_RELAY_JOIN_CODE].Value;
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
 
@@ -324,7 +327,7 @@ public class LobbyManager : MonoBehaviour
                 lobbyList = queryResponse.Results
             });
         }
-        catch(LobbyServiceException ex)
+        catch (LobbyServiceException ex)
         {
             Debug.Log(ex);
         }

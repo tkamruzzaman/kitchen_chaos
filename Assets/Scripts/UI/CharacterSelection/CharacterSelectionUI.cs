@@ -12,6 +12,8 @@ public class CharacterSelectionUI : MonoBehaviour
     [SerializeField] private TMP_Text lobbyNameText;
     [SerializeField] private TMP_Text lobbyCodeText;
 
+    private CharacterSelectionManager characterSelectionManager;
+
     private void Awake()
     {
         mainMenuButton.onClick.AddListener(() =>
@@ -23,7 +25,12 @@ public class CharacterSelectionUI : MonoBehaviour
 
         readyButton.onClick.AddListener(() =>
         {
-            FindObjectOfType<CharacterSelectionManager>().SetPlayerReady();
+            characterSelectionManager = FindObjectOfType<CharacterSelectionManager>();
+
+            if (characterSelectionManager)
+                characterSelectionManager.SetPlayerReady();
+            else
+                Debug.LogError("characterSelectionManager: " + characterSelectionManager);
         });
     }
 

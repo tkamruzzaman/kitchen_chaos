@@ -7,13 +7,13 @@ public class CharacterSelectionManager : NetworkBehaviour
     public static CharacterSelectionManager Instance { get; private set; }  
 
     public event EventHandler OnPlayerReadyChanged;
-    private Dictionary<ulong, bool> playersReadyDictionary = new();
+    private Dictionary<ulong, bool> playersReadyDictionary;
 
     private void Awake()
     {
         Instance = this;
 
-        playersReadyDictionary.Clear();
+        playersReadyDictionary = new Dictionary<ulong, bool>();
     }
 
     public void SetPlayerReady()

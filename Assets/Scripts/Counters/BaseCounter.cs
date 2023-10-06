@@ -1,8 +1,9 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 [SelectionBase]
-public abstract class BaseCounter : MonoBehaviour, IKitchenObjectParent
+public abstract class BaseCounter : NetworkBehaviour, IKitchenObjectParent
 {
     public EventHandler OnAnyObjectPlaced;
 
@@ -30,4 +31,6 @@ public abstract class BaseCounter : MonoBehaviour, IKitchenObjectParent
     public bool HasKitchenObject() => kitchenObject != null;
 
     public Transform GetKitchenObjectFollowTransform() => kitchenObjectHoldPoint;
+
+    public NetworkObject GetNetworkObject() => NetworkObject;
 }

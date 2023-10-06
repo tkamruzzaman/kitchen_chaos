@@ -15,12 +15,12 @@ public class CuttingCounterVisual : MonoBehaviour
 
     private void Start()
     {
-        cuttingCounter.OnInteracted += CuttingCounter_OnInteracted;
+        cuttingCounter.OnCutInteraction += CuttingCounter_OnInteracted;
     }
 
     private void OnDestroy()
     {
-        cuttingCounter.OnInteracted -= CuttingCounter_OnInteracted;
+        cuttingCounter.OnCutInteraction -= CuttingCounter_OnInteracted;
     }
 
     private void CuttingCounter_OnInteracted(object sender, System.EventArgs e)

@@ -24,7 +24,7 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
-        Player.Instance.OnPickedSomthing += Player_OnPickedSomthing;
+        Player.OnAnyPlayerPickedSomthing += Player_OnAnyPlayerPickedSomthing;
         DeliveryManager.Instance.OnRecipeSuccess += DeliveryManager_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed += DeliveryManager_OnRecipeFailed;
 
@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour
         cuttingCounters = FindObjectsOfType<CuttingCounter>();
         foreach (CuttingCounter cuttingCounter in cuttingCounters)
         {
-            cuttingCounter.OnAnyInteraction += CuttingCounter_OnAnyInteraction;
+            cuttingCounter.OnAnyCutInteraction += CuttingCounter_OnAnyInteraction;
         }
         trashCounters = FindObjectsOfType<TrashCounter>();
         foreach (TrashCounter trashCounter in trashCounters)
@@ -47,7 +47,7 @@ public class SoundManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        Player.Instance.OnPickedSomthing -= Player_OnPickedSomthing;
+        //Player.Instance.OnPickedSomthing -= Player_OnPickedSomthing;
         DeliveryManager.Instance.OnRecipeSuccess -= DeliveryManager_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed -= DeliveryManager_OnRecipeFailed;
         foreach (BaseCounter baseCounter in baseCounters)
@@ -56,7 +56,7 @@ public class SoundManager : MonoBehaviour
         }
         foreach (CuttingCounter cuttingCounter in cuttingCounters)
         {
-            cuttingCounter.OnAnyInteraction -= CuttingCounter_OnAnyInteraction;
+            cuttingCounter.OnAnyCutInteraction -= CuttingCounter_OnAnyInteraction;
         }
         foreach (TrashCounter trashCounter in trashCounters)
         {
@@ -64,9 +64,10 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    private void Player_OnPickedSomthing(object sender, EventArgs e)
+    private void Player_OnAnyPlayerPickedSomthing(object sender, EventArgs e)
     {
-        PlaySound(audioClipReferencesSO.objectPickup, Player.Instance.transform.position);
+        Player player = sender as Player;
+        PlaySound(audioClipReferencesSO.objectPickup, player.transform.position);
     }
 
     private void DeliveryManager_OnRecipeSuccess(object sender, DeliveryManager.OnRecipeSuccessEventArgs e)

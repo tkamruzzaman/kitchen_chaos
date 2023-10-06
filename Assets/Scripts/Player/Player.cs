@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 [SelectionBase]
-public class Player : MonoBehaviour, IKitchenObjectParent
+public class Player : NetworkBehaviour, IKitchenObjectParent
 {
-    public static Player Instance { get; private set; }
+    public static Player LocalInstance { get; private set; }
+
+    public static event EventHandler OnAnyPlayerSpawned;
+    public static event EventHandler OnAnyPlayerPickedSomthing;
 
     public event EventHandler OnPickedSomthing;
 
@@ -21,7 +25,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private List<Vector3> spawnPositions;
     [SerializeField] private Vector3 spawnRotation;
+    [SerializeField] private LayerMask collisionLayerMask;
     [SerializeField] private LayerMask countersLayerMask;
+    [SerializeField] private PlayerVisual playerVisual;
 
     private bool isWalking;
     public bool IsWalking { get => isWalking; private set { isWalking = value; } }
@@ -33,11 +39,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     [SerializeField] private Transform kitchenObjectHoldPoint;
     private KitchenObject kitchenObject;
 
-    private void Awake()
-    {
-        if (Instance == null) { Instance = this; }
-        else { Debug.LogError("There is more than one Player instance"); }
-    }
+    private const float ROTATION_EPSILON = 0.001f;
 
     private void Start()
     {
@@ -46,11 +48,29 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         gameInput.OnInteractAction += GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
 
-        transform.SetPositionAndRotation(spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Count)], Quaternion.Euler(spawnRotation));
+        PlayerData playerData = MultiplayerGameManager.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        playerVisual.SetPlayerColor(MultiplayerGameManager.Instance.GetPlayerColor(playerData.colorId));
     }
 
-    private void OnDestroy()
+    public override void OnNetworkSpawn()
     {
+        if (IsOwner)
+        {
+            LocalInstance = this;
+        }
+        transform.SetPositionAndRotation(spawnPositions[MultiplayerGameManager.Instance.GetPlayerDataIndexFromClientId(OwnerClientId)], Quaternion.Euler(spawnRotation));
+
+        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+        }
+    }
+
+    public override void OnDestroy()
+    {
+        OnAnyPlayerSpawned = null;
         gameInput.OnInteractAction -= GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction -= GameInput_OnInteractAlternateAction;
     }
@@ -75,8 +95,18 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         }
     }
 
+    private void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    {
+        if(clientId == OwnerClientId && HasKitchenObject())
+        {
+            KitchenObject.DestroyKitchenObject(kitchenObject);
+        }
+    }
+
     private void Update()
     {
+        if (!IsOwner) { return; }
+
         if (GameManager.Instance.IsWaitingToStart() 
             || GameManager.Instance.IsGameOver()) { return; }
 
@@ -94,9 +124,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         float playerRadius = 0.7f;
 
         bool canMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius,
-            moveDirection, Quaternion.identity, moveDistance, countersLayerMask);
-
-        isWalking = moveDirection != Vector3.zero;
+            moveDirection, Quaternion.identity, moveDistance, collisionLayerMask);
 
         //testing can we move on one direction in diagonal movement
         if (!canMove)
@@ -106,7 +134,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
             Vector3 moveDirX = new Vector3(moveDirection.x, 0, 0).normalized;
             canMove = (moveDirection.x < -0.5f || moveDirection.x > +0.5f)
                 && !Physics.BoxCast(transform.position, Vector3.one * playerRadius,
-                 moveDirX, Quaternion.identity, moveDistance, countersLayerMask);
+                 moveDirX, Quaternion.identity, moveDistance, collisionLayerMask);
 
             if (canMove)
             {
@@ -120,7 +148,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
                 Vector3 moveDirZ = new Vector3(0, 0, moveDirection.z).normalized;
                 canMove = (moveDirection.z < -0.5f || moveDirection.z > +0.5f)
                     && !Physics.BoxCast(transform.position, Vector3.one * playerRadius,
-                     moveDirZ, Quaternion.identity, moveDistance, countersLayerMask);
+                     moveDirZ, Quaternion.identity, moveDistance, collisionLayerMask);
 
                 if (canMove)
                 {
@@ -139,7 +167,17 @@ public class Player : MonoBehaviour, IKitchenObjectParent
             transform.position += moveDistance * moveDirection;
         }
 
-        transform.forward = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
+        isWalking = moveDirection != Vector3.zero;
+
+        Vector3 rotation = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
+        
+        if (rotation.Equals(Vector3.zero) || rotation.sqrMagnitude < ROTATION_EPSILON)
+        {
+            return;
+        }
+
+        transform.forward = rotation;
+
     }
 
     private void HandleInterection()
@@ -192,6 +230,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         if (kitchenObject != null)
         {
             OnPickedSomthing?.Invoke(this, EventArgs.Empty);
+            OnAnyPlayerPickedSomthing?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -202,4 +241,6 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public void ClearKitchenObject() => kitchenObject = null;
 
     public bool HasKitchenObject() => kitchenObject != null;
+
+    public NetworkObject GetNetworkObject() => NetworkObject;
 }

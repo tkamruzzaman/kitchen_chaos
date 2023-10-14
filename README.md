@@ -17,3 +17,19 @@ This course covers the following topics:
 * Code Style and Naming Rules
 
 Unity Version: 2022.3.4f1 LTS
+
+Multiplayer: 
+* Client Vs Server Auth
+* Netcode and Basic Setup
+* Sync Player Movement, Animation and collisions
+* Pick up and drop Objects
+* Sync Delivery Manager, Plates Counter, Trash Counter, Cutting Counter, Stove Counter, and Plate Add Ingredients
+* Sync Game States and Pause
+* Handle Disconnects
+* Connection Scene Flow
+* Character Selection Scene
+* Implement Lobby
+* Implement Relay
+* Multiplayer Debugging Tools
+* Add Singleplayer Option
+* Add support for Gamepad
